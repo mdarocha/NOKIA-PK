@@ -1,10 +1,6 @@
 name: C/C++ CI
 
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+on: [push, pull_request]
 
 jobs:
   build:
@@ -12,12 +8,28 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+
+    - name: Cache Qt
+      id: cache-qt
+      uses: actions/cache@v1
+      with:
+        path: ../Qt
+        key: QtCache
+
     - name: Install Qt
       uses: jurplel/install-qt-action@v2
       with:
-          mirror: 'http://mirrors.ocf.berkeley.edu/qt/'
+        mirror: 'http://mirrors.ocf.berkeley.edu/qt/'
+        cached: ${{ steps.cache-qt.outputs.cache-hit }}
 
-    - name: configure
+    - name: cmake
       run: cmake .
     - name: make
       run: make
+
+    - name: UE tests
+      run: ./UE/Tests/Application/UeApplicationUT
+    - name: BTS tests
+      run: ./BTS/Tests/Application/BtsApplicationUT
+    - name: Common tests
+      run: ./COMMON/Tests/COMMON_UT
