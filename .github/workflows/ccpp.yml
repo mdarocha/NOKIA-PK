@@ -8,13 +8,15 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-    
+
     steps:
     - uses: actions/checkout@v2
     - name: Install Qt
       uses: jurplel/install-qt-action@v2
+      with:
+          mirror: 'http://mirrors.ocf.berkeley.edu/qt/'
+
     - name: configure
       run: cmake .
     - name: make
