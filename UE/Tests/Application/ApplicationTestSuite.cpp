@@ -33,11 +33,9 @@ protected:
                                 timerPortMock};
 };
 
-struct ApplicationNotConnectedTestSuite : ApplicationTestSuite
-{};
+struct ApplicationNotConnectedTestSuite : ApplicationTestSuite {};
 
-TEST_F(ApplicationNotConnectedTestSuite, shallSetNotConnectedState) {
-}
+TEST_F(ApplicationNotConnectedTestSuite, shallSetNotConnectedState) { }
 
 TEST_F(ApplicationNotConnectedTestSuite, shallSendAttachRequest) {
     EXPECT_CALL(btsPortMock, sendAttachRequest(BTS_ID));
