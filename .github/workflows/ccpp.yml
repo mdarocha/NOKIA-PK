@@ -17,4 +17,10 @@ jobs:
       uses: jurplel/install-qt-action@v2
     - name: cmake
       run: cmake .
+    - name: make
+      run: make
+    - name: ut
+      run: make ut
+    - name: next steps
+      run: echo "karamba"
     
