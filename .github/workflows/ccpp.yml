@@ -17,8 +17,10 @@ jobs:
       uses: jurplel/install-qt-action@v2
     - name: cmake
       run: cmake .
-    - name: make
-      run: make
+    - name: make all targets
+      run: make all
+    - name: ls -al .
+      run: ls -al .
     - name: UT for BtsApplication
       run: make BtsApplicationUT 
     - name: run BTS ut
