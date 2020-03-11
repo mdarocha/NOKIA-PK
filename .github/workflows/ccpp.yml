@@ -19,8 +19,16 @@ jobs:
       run: cmake .
     - name: make
       run: make
-    - name: ut
-      run: make ut
+    - name: UT for BtsApplication
+      run: make BtsApplicationUT 
+    - name: UT for BTS_Tests
+      run: make BTS_Tests 
+    - name: UT for COMMON
+      run: make COMMON_UT
+    - name: UT for UeApplication
+      run: make UeApplicationUT
+    - name: UT for UE_Tests
+      run: make UE_Tests
     - name: next steps
       run: echo "karamba"
     
