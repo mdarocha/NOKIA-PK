@@ -21,8 +21,7 @@ jobs:
       run: make
     - name: UT for BtsApplication
       run: make BtsApplicationUT 
-    - name: UT for BTS_Tests
-      run: make BTS_Tests 
+      run: ./BtsApplicationUT
     - name: UT for COMMON
       run: make COMMON_UT
     - name: UT for UeApplication
