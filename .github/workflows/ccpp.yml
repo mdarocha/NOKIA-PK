@@ -19,8 +19,15 @@ jobs:
       run: cmake .
     - name: make all targets
       run: make all
-    - name: ls -al .
-      run: ls -al .
+    - name: ls -al subdir1
+      run: ls -al BTS
+      
+    - name: ls -al subdir2
+      run: ls -al COMMON
+      
+    - name: ls -al subdir3
+      run: ls -al UE
+      
     - name: UT for BtsApplication
       run: make BtsApplicationUT 
     - name: run BTS ut
