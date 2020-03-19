@@ -9,7 +9,8 @@ class NotConnectedState : public BaseState
 {
 public:
     NotConnectedState(Context& context);
-    void handleSib(common::BtsId btsId);
+
+    void handleSib(common::BtsId btsId) override;
 };
 
 }
