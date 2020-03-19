@@ -69,4 +69,11 @@ TEST_F(ApplicationConnectingTestSuite, shallShowNotConnectedOnAttachReject)
     EXPECT_CALL(timerPortMock, stopTimer());
     objectUnderTest.handleAttachReject();
 }
+
+TEST_F(ApplicationConnectingTestSuite, shallShowNotConnectedOnTimeout)
+{
+    EXPECT_CALL(userPortMock, showNotConnected());
+    objectUnderTest.handleTimeout();
+}
+
 }
