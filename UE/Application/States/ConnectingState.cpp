@@ -1,4 +1,5 @@
 #include "ConnectingState.hpp"
+#include "ConnectedState.hpp"
 
 namespace ue
 {
@@ -13,4 +14,8 @@ ConnectingState::ConnectingState(Context &context, common::BtsId btsId)
     context.timer.startTimer(500ms);
 }
 
+void ue::ConnectingState::handleAttachAccept()
+{
+    context.setState<ConnectedState>();
+}
 }
