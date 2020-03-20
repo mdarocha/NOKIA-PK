@@ -20,14 +20,8 @@ jobs:
     - name: make all targets
       run: make all
 
-    - name: ls -al subdir1
-      run: ls -al BTS
-
-    - name: ls -al subdir2
-      run: ls -al COMMON
-
-    - name: ls -al subdir3
-      run: ls -al UE
+    - name: tree
+      run: tree
 
     - name: UT for BtsApplication
       run: make BtsApplicationUT 
