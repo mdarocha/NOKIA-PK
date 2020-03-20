@@ -20,9 +20,6 @@ jobs:
     - name: make all targets
       run: make all
 
-    - name: tree
-      run: tree
-
     - name: UT for BtsApplication
       run: make BtsApplicationUT 
 
