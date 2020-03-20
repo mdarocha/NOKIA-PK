@@ -10,7 +10,7 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-    
+
     steps:
     - uses: actions/checkout@v2
     - name: Install Qt
@@ -19,25 +19,28 @@ jobs:
       run: cmake .
     - name: make all targets
       run: make all
+
     - name: ls -al subdir1
       run: ls -al BTS
-      
+
     - name: ls -al subdir2
       run: ls -al COMMON
-      
+
     - name: ls -al subdir3
       run: ls -al UE
-      
+
     - name: UT for BtsApplication
       run: make BtsApplicationUT 
+
     - name: run BTS ut
-      run: ./BtsApplicationUT
+      run: ./BTS/Tests/Application/BtsApplicationUT
+
     - name: UT for COMMON
       run: make COMMON_UT
+
     - name: UT for UeApplication
       run: make UeApplicationUT
-    - name: UT for UE_Tests
-      run: make UE_Tests
+
     - name: next steps
       run: echo "karamba"
-    
+
