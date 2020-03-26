@@ -6,6 +6,8 @@
 Używamy **/issues**
 
 ## Rejestrowanie pracy
-Każda grupa ma stworzony board w **/projects**  
-Po ustaleniu przypisań do grup używamy tylko swoich boardów
-
+Po ustaleniu przypisań do grup w **/issues** robimy ticket z informacjami:  
+- nazwa grupy,  
+- osoby w grupie,  
+- link do boarda,  
+- link do forka gdzie jest praca waszej grupy.
