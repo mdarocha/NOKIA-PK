@@ -83,7 +83,7 @@ TEST_F(BtsPortTestSuite, shallHandleAttachReject)
 TEST_F(BtsPortTestSuite, shallSendAttachRequest)
 {
     common::BinaryMessage msg;
-    EXPECT_CALL(transportMock, sendMessage(_)).WillOnce(SaveArg<0>(&msg));
+    EXPECT_CALL(transportMock, sendMessage(_)).WillOnce(Invoke([&msg](auto param) { msg = param; return false; }));
     objectUnderTest.sendAttachRequest(BTS_ID);
     common::IncomingMessage reader(msg);
     ASSERT_NO_THROW(EXPECT_EQ(common::MessageId::AttachRequest, reader.readMessageId()) );
