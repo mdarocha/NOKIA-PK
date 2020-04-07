@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Ports/IDbPort.hpp"
 #include "Logger/PrefixedLogger.hpp"
 #include "Messages/PhoneNumber.hpp"
 #include "IEventsHandler.hpp"
@@ -18,7 +19,8 @@ public:
                 ILogger& iLogger,
                 IBtsPort& bts,
                 IUserPort& user,
-                ITimerPort& timer);
+                ITimerPort& timer,
+                IDbPort& db);
     ~Application();
 
     // ITimerEventsHandler interface
