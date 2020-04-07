@@ -97,6 +97,7 @@ TEST_F(UserPortTestSuite, shallSendSmsEventOnSmsSend)
 
     EXPECT_CALL(smsComposeModeMock, getPhoneNumber()).WillOnce(Return(number));
     EXPECT_CALL(smsComposeModeMock, getSmsText()).WillOnce(Return(text));
+    EXPECT_CALL(smsComposeModeMock, clearSmsText());
 
     EXPECT_CALL(handlerMock, handleSendSms(number, text));
 

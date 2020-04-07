@@ -44,6 +44,7 @@ void UserPort::handleAcceptClicked()
             auto text = menu->getSmsText();
             handler->handleSendSms(recipent, text);
 
+            menu->clearSmsText();
             showConnected();
             break;
         }
