@@ -82,4 +82,14 @@ TEST_F(ApplicationConnectedTestSuite, shallShowConnectedOnAttachAccept)
     //constructor
 }
 
+TEST_F(ApplicationConnectedTestSuite, shallSendSms)
+{
+    auto recipent = common::PhoneNumber{123};
+    auto message = "siema";
+
+    EXPECT_CALL(btsPortMock, sendSms(recipent, message));
+
+    objectUnderTest.handleSendSms(recipent, message);
+}
+
 }

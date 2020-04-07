@@ -69,8 +69,10 @@ void BtsPort::sendAttachRequest(common::BtsId btsId)
                                 common::PhoneNumber{}};
     msg.writeBtsId(btsId);
     transport.sendMessage(msg.getMessage());
-
-
 }
 
+void BtsPort::sendSms(common::PhoneNumber recipent, std::string message)
+{
+
+}
 }
