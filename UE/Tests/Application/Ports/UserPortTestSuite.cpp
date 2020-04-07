@@ -109,4 +109,16 @@ TEST_F(UserPortTestSuite, shallSendSmsEventOnSmsSend)
     EXPECT_EQ(currentMode.second, &listViewModeMock);
 }
 
+TEST_F(UserPortTestSuite, shallExitSmsCreationOnReject)
+{
+    EXPECT_CALL(guiMock, setListViewMode()).WillOnce(ReturnRef(listViewModeMock));
+    EXPECT_CALL(listViewModeMock, clearSelectionList());
+    EXPECT_CALL(listViewModeMock, addSelectionListItem(_, _)).Times(AtLeast(1));
+
+    EXPECT_CALL(smsComposeModeMock, clearSmsText());
+
+    objectUnderTest.setCurrentMode(CurrentView::NewSms, &smsComposeModeMock);
+    rejectCallback();
+}
+
 }

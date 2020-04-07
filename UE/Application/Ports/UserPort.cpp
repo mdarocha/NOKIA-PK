@@ -56,7 +56,17 @@ void UserPort::handleAcceptClicked()
 
 void UserPort::handleRejectClicked()
 {
-
+    auto current = getCurrentMode();
+    switch(current.first) {
+        case CurrentView::NewSms: {
+            auto menu = (IUeGui::ISmsComposeMode*)current.second;
+            menu->clearSmsText();
+            showConnected();
+        }
+        default: {
+            break;
+        }
+    }
 }
 
 void UserPort::handleHomeClicked()
