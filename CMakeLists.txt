@@ -7,7 +7,10 @@ include("${CMAKE_CURRENT_SOURCE_DIR}/internal_commands.cmake")
 
 set_compiler_options()
 
+set(HIBERLITE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/hiberlite")
+
 add_subdirectory(googletest)
+add_subdirectory(hiberlite)
 add_subdirectory(UE)
 add_subdirectory(BTS)
 add_subdirectory(COMMON)
