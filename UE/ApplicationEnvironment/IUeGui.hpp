@@ -12,6 +12,7 @@ using common::PhoneNumber;
 class IUeGui
 {
 public:
+    class BaseMode;
     class IListViewMode;
     class ISmsComposeMode;
     class IDialMode;

@@ -1,12 +1,13 @@
 #pragma once
 
 #include "IUeGui.hpp"
+#include "BaseMode.hpp"
 #include "Messages/PhoneNumber.hpp"
 
 namespace ue
 {
 
-class IUeGui::ISmsComposeMode
+class IUeGui::ISmsComposeMode : public IUeGui::BaseMode
 {
 public:
     virtual ~ISmsComposeMode() = default;
