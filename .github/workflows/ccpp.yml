@@ -9,7 +9,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       with:
-        submodules: true
+        submodules: recursive
 
     - name: Cache Qt
       id: cache-qt
@@ -23,6 +23,9 @@ jobs:
       with:
         mirror: 'http://mirrors.ocf.berkeley.edu/qt/'
         cached: ${{ steps.cache-qt.outputs.cache-hit }}
+
+    - name: Install sqlite3 headers
+      run: sudo apt-get install libsqlite3-dev
 
     - name: gcc version
       run: gcc --version
