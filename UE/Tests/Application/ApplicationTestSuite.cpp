@@ -91,6 +91,7 @@ TEST_F(ApplicationConnectedTestSuite, shallSendSms)
     auto message = "siema";
 
     EXPECT_CALL(btsPortMock, sendSms(recipent, message));
+    EXPECT_CALL(dbPortMock, saveSentSms(recipent, message));
 
     objectUnderTest.handleSendSms(recipent, message);
 }

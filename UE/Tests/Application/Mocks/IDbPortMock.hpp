@@ -12,5 +12,7 @@ public:
     IDbPortMock();
     ~IDbPortMock() override;
 
+    MOCK_METHOD(void, saveSentSms, (common::PhoneNumber, std::string), (final));
 };
+
 }
