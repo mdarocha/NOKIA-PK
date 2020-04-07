@@ -3,4 +3,4 @@
 
 Use `git clone --recursive` when cloning to make sure submodules are included
 
-If missing submodules, use `git submodule init` or `git submodule update`
+If missing submodules, use ` git submodule update --init --recursive hiberlite googletest`
