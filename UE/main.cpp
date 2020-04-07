@@ -19,10 +19,7 @@ int main(int argc, char* argv[])
     BtsPort bts(logger, tranport, phoneNumber);
     UserPort user(logger, gui, phoneNumber);
     TimerPort timer(logger);
-
-    auto dbName = std::string("db-");
-    dbName.push_back(phoneNumber.value);
-    DbPort db(dbName);
+    DbPort db(phoneNumber);
 
     Application app(phoneNumber, logger, bts, user, timer, db);
     bts.start(app);
