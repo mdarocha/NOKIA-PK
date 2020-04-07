@@ -43,7 +43,7 @@ void Application::handleAttachReject()
 
 void Application::handleDisconnect()
 {
-    
+    context.setState<NotConnectedState>();
 }
 
 }

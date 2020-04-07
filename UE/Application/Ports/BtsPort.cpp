@@ -74,7 +74,8 @@ void BtsPort::sendAttachRequest(common::BtsId btsId)
 
 void BtsPort::handleDisconnected()
 {
-
+    logger.logDebug("handleDesconnected");
+    handler->handleDisconnect();
 }
 
 }
