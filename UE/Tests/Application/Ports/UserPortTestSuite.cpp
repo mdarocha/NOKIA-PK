@@ -121,4 +121,10 @@ TEST_F(UserPortTestSuite, shallExitSmsCreationOnReject)
     rejectCallback();
 }
 
+TEST_F(UserPortTestSuite, shallShowSMSReceivedIconOnSMSReceive)
+{
+    EXPECT_CALL(guiMock, showNewSms());
+    objectUnderTest.showNewSms();
+}
+
 }

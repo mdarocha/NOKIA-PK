@@ -96,4 +96,15 @@ TEST_F(ApplicationConnectedTestSuite, shallSendSms)
     objectUnderTest.handleSendSms(recipent, message);
 }
 
+TEST_F(ApplicationConnectedTestSuite, challHandleReceivedSms)
+{
+    auto sender = common::PhoneNumber{124};
+    auto message = "witaj";
+    
+    EXPECT_CALL(userPortMock, showNewSms());
+    EXPECT_CALL(dbPortMock, saveReceivedSms(sender, message));
+
+    objectUnderTest.handleReceivedSms(sender, message);
+}
+
 }

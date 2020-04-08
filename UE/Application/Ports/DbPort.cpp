@@ -32,6 +32,14 @@ void DbPort::saveSentSms(common::PhoneNumber to, std::string message)
     msg->text = message;
 }
 
+void DbPort::saveReceivedSms(common::PhoneNumber from, std::string message)
+{
+    auto msg = db.createBean<DbMessage>();
+    msg->fromNumber = from.value;
+    msg->toNumber = phoneNumber.value;
+    msg->text = message;
+}
+
 }
 
 HIBERLITE_EXPORT_CLASS(ue::DbMessage)

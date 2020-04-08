@@ -111,4 +111,15 @@ TEST_F(BtsPortTestSuite, shallSendSms)
     ASSERT_NO_THROW(EXPECT_EQ(message, reader.readRemainingText()));
     ASSERT_NO_THROW(reader.checkEndOfMessage());
 }
+
+TEST_F(BtsPortTestSuite, shallHandleReceivedSms)
+{
+    EXPECT_CALL(handlerMock, handleReceivedSms);
+    common::OutgoingMessage msg{common::MessageId::Sms,
+                                common::PhoneNumber{},
+                                PHONE_NUMBER};
+    messageCallback(msg.getMessage());
 }
+}
+
+
