@@ -31,7 +31,7 @@ jobs:
       run: cmake .
 
     - name: make
-      run: make
+      run: make -j2
 
     - name: UE tests
       run: ./UE/Tests/Application/UeApplicationUT

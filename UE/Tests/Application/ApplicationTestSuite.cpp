@@ -41,6 +41,12 @@ TEST_F(ApplicationNotConnectedTestSuite, shallSetNotConnectedStateAtStartup)
 
 }
 
+TEST_F(ApplicationNotConnectedTestSuite, shallSetNotConnectedStateAtDisconnectEvent)
+{
+    EXPECT_CALL(userPortMock, showNotConnected());
+    objectUnderTest.handleDisconnect();
+}
+
 struct ApplicationConnectingTestSuite : ApplicationNotConnectedTestSuite {
     ApplicationConnectingTestSuite() {
         using namespace std::chrono_literals;
