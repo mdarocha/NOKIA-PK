@@ -6,6 +6,7 @@
 #include "Mocks/IBtsPortMock.hpp"
 #include "Mocks/IUserPortMock.hpp"
 #include "Mocks/ITimerPortMock.hpp"
+#include "Mocks/IDbPortMock.hpp"
 #include "Messages/PhoneNumber.hpp"
 #include <memory>
 
@@ -24,6 +25,7 @@ protected:
     StrictMock<IBtsPortMock> btsPortMock;
     StrictMock<IUserPortMock> userPortMock;
     StrictMock<ITimerPortMock> timerPortMock;
+    NiceMock<IDbPortMock> dbPortMock;
 
     Expectation notConnectedExpectation = EXPECT_CALL(userPortMock, showNotConnected());
 
@@ -31,7 +33,8 @@ protected:
                                 loggerMock,
                                 btsPortMock,
                                 userPortMock,
-                                timerPortMock};
+                                timerPortMock,
+                                dbPortMock};
 };
 
 struct ApplicationNotConnectedTestSuite : ApplicationTestSuite {};
@@ -86,6 +89,17 @@ struct ApplicationConnectedTestSuite : ApplicationConnectingTestSuite {
 TEST_F(ApplicationConnectedTestSuite, shallShowConnectedOnAttachAccept)
 {
     //constructor
+}
+
+TEST_F(ApplicationConnectedTestSuite, shallSendSms)
+{
+    auto recipent = common::PhoneNumber{123};
+    auto message = "siema";
+
+    EXPECT_CALL(btsPortMock, sendSms(recipent, message));
+    EXPECT_CALL(dbPortMock, saveSentSms(recipent, message));
+
+    objectUnderTest.handleSendSms(recipent, message);
 }
 
 }

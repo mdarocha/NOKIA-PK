@@ -22,6 +22,8 @@ public:
     void handleAttachReject() override;
     void handleDisconnect() override;
 
+    //IUserEventsHandler interface
+    void handleSendSms(common::PhoneNumber recipent, std::string message) override;
 protected:
     Context& context;
 

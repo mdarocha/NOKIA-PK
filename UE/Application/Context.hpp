@@ -1,6 +1,7 @@
 #pragma once
 
 #include "IEventsHandler.hpp"
+#include "Ports/IDbPort.hpp"
 #include "Logger/ILogger.hpp"
 #include <memory>
 
@@ -13,6 +14,8 @@ struct Context
     IBtsPort& bts;
     IUserPort& user;
     ITimerPort& timer;
+    IDbPort& db;
+
     std::unique_ptr<IEventsHandler> state{};
 
     template <typename State, typename ...Arg>

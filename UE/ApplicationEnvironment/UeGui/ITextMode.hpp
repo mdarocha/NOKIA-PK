@@ -1,11 +1,12 @@
 #pragma once
 
 #include "IUeGui.hpp"
+#include "BaseMode.hpp"
 
 namespace ue
 {
 
-class IUeGui::ITextMode
+class IUeGui::ITextMode : public IUeGui::BaseMode
 {
 public:
     virtual ~ITextMode() = default;
