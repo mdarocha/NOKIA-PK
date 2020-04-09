@@ -35,9 +35,15 @@ void BaseState::handleAttachReject()
     logger.logError("Uexpected: handleAttachReject");
 }
 
+
 void BaseState::handleSendSms(common::PhoneNumber recipent, std::string message)
 {
     logger.logError("Uexpected: handleSendSms");
+}
+  
+void BaseState::handleDisconnect()
+{
+    logger.logError("Uexpected: handleDisconnect");
 }
 
 }

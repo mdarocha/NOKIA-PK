@@ -46,5 +46,10 @@ void Application::handleSendSms(common::PhoneNumber recipent, std::string messag
 {
     context.state->handleSendSms(recipent, message);
 }
+  
+void Application::handleDisconnect()
+{
+    context.setState<NotConnectedState>();
+}
 
 }

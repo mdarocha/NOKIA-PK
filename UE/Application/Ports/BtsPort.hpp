@@ -19,6 +19,7 @@ public:
     void sendSms(common::PhoneNumber recipent, std::string message) override;
 private:
     void handleMessage(BinaryMessage msg);
+    void handleDisconnected();
 
     common::PrefixedLogger logger;
     common::ITransport& transport;

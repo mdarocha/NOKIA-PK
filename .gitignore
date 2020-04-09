@@ -14,3 +14,4 @@ _deps
 *.o
 *_autogen
 *syslog*
+.vscode
