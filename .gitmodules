@@ -2,3 +2,6 @@
     path = googletest
     url = https://github.com/google/googletest.git
     ignore = dirty
+[submodule "sqlite_orm"]
+	path = sqlite_orm
+	url = https://github.com/fnc12/sqlite_orm.git
