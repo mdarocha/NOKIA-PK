@@ -23,7 +23,6 @@ set_qt_options()
 aux_source_directory(. SRC_LIST)
 add_executable(${PROJECT_NAME} ${SRC_LIST})
 
-
 target_link_libraries(${PROJECT_NAME} Common)
 target_link_libraries(${PROJECT_NAME} UeApplication)
 target_link_libraries(${PROJECT_NAME} UeApplicationEnvironment)
@@ -34,6 +33,10 @@ target_link_libraries(${PROJECT_NAME} QtUeTransport)
 qt5_use_modules(${PROJECT_NAME}  Widgets)
 qt5_use_modules(${PROJECT_NAME}  Network)
 target_link_qt()
+
+find_package (SQLite3)
+include_directories(${SQLite3_INCLUDE_DIRS})
+target_link_libraries (${PROJECT_NAME} ${SQLite3_LIBRARIES})
 
 set(IMAGES_DIRECTORY ${UE_QTAPPENV_DIR}/GUI)
 copy_images()
