@@ -25,16 +25,15 @@ void DbPort::stop()
 
 }
 
-void DbPort::saveSentSms(common::PhoneNumber to, std::string message)
+int DbPort::saveSentSms(const common::PhoneNumber& to, const std::string& message)
 {
+    DbMessage msg{ -1, message, phoneNumber.value, to.value };
+    db->insert(msg);
 }
 
-void DbPort::saveReceivedSms(common::PhoneNumber from, std::string message)
+int DbPort::saveReceivedSms(const common::PhoneNumber& from, const std::string& message)
 {
-    auto msg = db.createBean<DbMessage>();
-    msg->fromNumber = from.value;
-    msg->toNumber = phoneNumber.value;
-    msg->text = message;
+    //TODO
 }
 
 }

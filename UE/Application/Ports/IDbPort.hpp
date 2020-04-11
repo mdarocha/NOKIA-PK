@@ -10,8 +10,9 @@ class IDbPort
 {
 public:
     virtual ~IDbPort() = default;
-    virtual void saveSentSms(common::PhoneNumber to, std::string message) = 0;
-    virtual void saveReceivedSms(common::PhoneNumber from, std::string message) = 0;
+
+    virtual int saveSentSms(const common::PhoneNumber& to, const std::string& message) = 0;
+    virtual int saveReceivedSms(const common::PhoneNumber& from, const std::string& message) = 0;
 };
 
 }

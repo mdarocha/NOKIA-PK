@@ -12,8 +12,8 @@ public:
     IDbPortMock();
     ~IDbPortMock() override;
 
-    MOCK_METHOD(void, saveSentSms, (common::PhoneNumber, std::string), (final));
-    MOCK_METHOD(void, saveReceivedSms, (common::PhoneNumber, std::string), (final));
+    MOCK_METHOD(int, saveSentSms, (const common::PhoneNumber&, const std::string&), (final));
+    MOCK_METHOD(int, saveReceivedSms, (const common::PhoneNumber&, const std::string&), (final));
 };
 
 }
