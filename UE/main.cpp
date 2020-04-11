@@ -23,7 +23,7 @@ int main(int argc, char* argv[])
 
     Application app(phoneNumber, logger, bts, user, timer, db);
     bts.start(app);
-    user.start(app);
+    user.start(app, db);
     timer.start(app);
     db.start();
 

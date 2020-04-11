@@ -12,10 +12,11 @@ UserPort::UserPort(common::ILogger &logger, IUeGui &gui, common::PhoneNumber pho
       currentMode(nullptr)
 {}
 
-void UserPort::start(IUserEventsHandler &handler)
+void UserPort::start(IUserEventsHandler &handler, IDbPort& dbPort)
 {
     this->handler = &handler;
-    gui.setTitle("Nokia " + to_string(phoneNumber));
+    this->dbPort = &dbPort;
+    gui.setTitle("Nokia 3310: " + to_string(phoneNumber));
     gui.setAcceptCallback([this]() { handleAcceptClicked(); });
     gui.setRejectCallback([this]() { handleRejectClicked(); });
 }
@@ -23,6 +24,7 @@ void UserPort::start(IUserEventsHandler &handler)
 void UserPort::stop()
 {
     handler = nullptr;
+    dbPort = nullptr;
     gui.setAcceptCallback(nullptr);
     gui.setRejectCallback(nullptr);
 }
@@ -33,8 +35,13 @@ void UserPort::handleAcceptClicked()
     switch(current.first) {
         case CurrentView::HomeMenu: {
             auto currentItem = ((IUeGui::IListViewMode*)current.second)->getCurrentItemIndex();
-            if(currentItem.first && currentItem.second == UserPort::NewSmsItem) {
+            if(currentItem.first && currentItem.second == UserPort::NewSmsItem) 
+            {
                 setCurrentMode(CurrentView::NewSms, &gui.setSmsComposeMode());
+            }
+            if(currentItem.first && currentItem.second == UserPort::ListSmsItem)
+            {
+                showSmsList();
             }
             break;
         }
@@ -99,6 +106,32 @@ void UserPort::showConnected()
 void UserPort::showNewSms()
 {
     gui.showNewSms();
+}
+
+void UserPort::showSmsList()
+{
+    std::vector<DbMessage> messages = dbPort->getAllMessages();
+    auto menu = (IUeGui::IListViewMode*) &gui.setListViewMode();
+    menu->clearSelectionList();
+    if(messages.empty())
+    {
+        menu->addSelectionListItem("No messages to view :)", "No messages");
+    }
+    else
+    {
+        for(auto m : messages)
+        {
+            if(m.fromNumber == phoneNumber.value)
+            {
+                menu->addSelectionListItem("To: " + m.toNumber, m.text);
+            }
+            else
+            {
+                menu->addSelectionListItem("From: " + m.fromNumber, m.text);
+            }
+        }
+    }
+    setCurrentMode(CurrentView::SmsList, menu);
 }
 
 }
