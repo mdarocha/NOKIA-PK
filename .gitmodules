@@ -2,7 +2,3 @@
     path = googletest
     url = https://github.com/google/googletest.git
     ignore = dirty
-[submodule "hiberlite"]
-    path = hiberlite
-    url = https://github.com/paulftw/hiberlite.git
-    ignore = dirty
