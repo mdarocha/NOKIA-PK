@@ -5,12 +5,12 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 include("${CMAKE_CURRENT_SOURCE_DIR}/internal_commands.cmake")
 
+set(SQLITE_ORM_DIR "${CMAKE_CURRENT_SOURCE_DIR}/sqlite_orm")
+option(SqliteOrm_BuildTests OFF)
+
 set_compiler_options()
 
-set(HIBERLITE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/hiberlite")
-
 add_subdirectory(googletest)
-add_subdirectory(hiberlite)
 add_subdirectory(UE)
 add_subdirectory(BTS)
 add_subdirectory(COMMON)

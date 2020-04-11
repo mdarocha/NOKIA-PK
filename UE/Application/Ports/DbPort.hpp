@@ -1,28 +1,24 @@
 #pragma once
 
 #include<string>
-#include "hiberlite.h"
+#include "sqlite_orm.h"
 #include "Messages/PhoneNumber.hpp"
 #include "IDbPort.hpp"
 
 namespace ue
 {
 
-class DbMessage {
-    friend class hiberlite::access;
-    template<class Archive>
-    void hibernate(Archive & ar)
-    {
-        ar & HIBERLITE_NVP(text);
-        ar & HIBERLITE_NVP(fromNumber);
-        ar & HIBERLITE_NVP(toNumber);
-    }
-
-    public:
-        std::string text;
-        int fromNumber;
-        int toNumber;
-};
+inline auto initStorage(const std::string& path) {
+    using namespace sqlite_orm;
+    return make_storage(path,
+            make_table("Messages",
+                make_column("Id", &DbMessage::id,
+                    primary_key(), autoincrement()),
+                make_column("Text", &DbMessage::text),
+                make_column("FromNumber", &DbMessage::fromNumber),
+                make_column("ToNumber", &DbMessage::toNumber)));
+}
+using Storage = decltype(initStorage(""));
 
 class DbPort : public IDbPort
 {
@@ -31,12 +27,12 @@ class DbPort : public IDbPort
         void start();
         void stop();
 
-        void saveSentSms(common::PhoneNumber to, std::string message) override;
-        void saveReceivedSms(common::PhoneNumber from, std::string message) override;
+        int saveSentSms(const common::PhoneNumber& to, const std::string& message) override;
+        int saveReceivedSms(const common::PhoneNumber& from, const std::string& message) override;
     private:
         common::PhoneNumber phoneNumber;
         std::string databasePath;
-        hiberlite::Database db;
+        std::unique_ptr<Storage> db;
 };
 
 }
