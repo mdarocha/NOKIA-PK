@@ -12,6 +12,7 @@ set(COMMON_DIR ${UE_DIR}/../COMMON)
 include_directories(${UE_APP_DIR})
 include_directories(${UE_APPENV_DIR})
 include_directories(${COMMON_DIR})
+include_directories(${SQLITE_ORM_DIR}/include/sqlite_orm)
 
 add_subdirectory(Application)
 add_subdirectory(ApplicationEnvironment)

@@ -5,6 +5,9 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 include("${CMAKE_CURRENT_SOURCE_DIR}/internal_commands.cmake")
 
+set(SQLITE_ORM_DIR "${CMAKE_CURRENT_SOURCE_DIR}/sqlite_orm")
+option(SqliteOrm_BuildTests OFF)
+
 set_compiler_options()
 
 add_subdirectory(googletest)
