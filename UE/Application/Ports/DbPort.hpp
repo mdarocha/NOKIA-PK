@@ -32,6 +32,7 @@ class DbPort : public IDbPort
         void stop();
 
         void saveSentSms(common::PhoneNumber to, std::string message) override;
+        void saveReceivedSms(common::PhoneNumber from, std::string message) override;
     private:
         common::PhoneNumber phoneNumber;
         std::string databasePath;

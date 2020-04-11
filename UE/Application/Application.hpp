@@ -30,6 +30,7 @@ public:
     void handleSib(common::BtsId btsId) override;
     void handleAttachAccept() override;
     void handleAttachReject() override;
+    void handleReceivedSms(common::PhoneNumber sender, std::string message) override;
     void handleDisconnect() override;
 
     //IUserEventsHandler interface

@@ -96,4 +96,9 @@ void UserPort::showConnected()
     setCurrentMode(CurrentView::HomeMenu, menu);
 }
 
+void UserPort::showNewSms()
+{
+    gui.showNewSms();
+}
+
 }

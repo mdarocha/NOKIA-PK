@@ -16,4 +16,10 @@ void ConnectedState::handleSendSms(common::PhoneNumber recipent, std::string mes
     context.bts.sendSms(recipent, message);
 }
 
+void ConnectedState::handleReceivedSms(common::PhoneNumber sender, std::string message)
+{
+    context.db.saveReceivedSms(sender, message);
+    context.user.showNewSms();
+}
+
 }

@@ -52,4 +52,9 @@ void Application::handleDisconnect()
     context.setState<NotConnectedState>();
 }
 
+void Application::handleReceivedSms(common::PhoneNumber sender, std::string message)
+{
+    context.state->handleReceivedSms(sender, message);
+}
+
 }
