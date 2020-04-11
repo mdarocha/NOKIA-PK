@@ -6,18 +6,20 @@
 
 namespace ue
 {
-enum MessageStatuses{
+enum class MessageStatus
+{
     not_read,
     read,
     sent
 };
 
-struct DbMessage {
+struct DbMessage 
+{
     int id;
     std::string text;
     int fromNumber;
     int toNumber;
-    int status;
+    MessageStatus status;
 };
 
 class IDbPort

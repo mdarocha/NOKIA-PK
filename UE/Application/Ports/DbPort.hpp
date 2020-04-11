@@ -21,7 +21,6 @@ inline auto initStorage(const std::string& path)
                 make_column("Status", &DbMessage::status)
                 )
             );
-
 }
 
 using Storage = decltype(initStorage(""));
