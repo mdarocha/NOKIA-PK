@@ -8,13 +8,6 @@
 namespace ue
 {
 
-struct DbMessage {
-    int id;
-    std::string text;
-    int fromNumber;
-    int toNumber;
-};
-
 inline auto initStorage(const std::string& path) {
     using namespace sqlite_orm;
     return make_storage(path,

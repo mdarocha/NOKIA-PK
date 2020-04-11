@@ -28,12 +28,13 @@ void DbPort::stop()
 int DbPort::saveSentSms(const common::PhoneNumber& to, const std::string& message)
 {
     DbMessage msg{ -1, message, phoneNumber.value, to.value };
-    db->insert(msg);
+    return db->insert(msg);
 }
 
 int DbPort::saveReceivedSms(const common::PhoneNumber& from, const std::string& message)
 {
-    //TODO
+    DbMessage msg{ -1, message, from.value, phoneNumber.value };
+    return db->insert(msg);
 }
 
 }

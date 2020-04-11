@@ -6,6 +6,13 @@
 namespace ue
 {
 
+struct DbMessage {
+    int id;
+    std::string text;
+    int fromNumber;
+    int toNumber;
+};
+
 class IDbPort
 {
 public:
