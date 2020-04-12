@@ -4,6 +4,7 @@
 #include "Logger/PrefixedLogger.hpp"
 #include "IUeGui.hpp"
 #include "UeGui/ISmsComposeMode.hpp"
+#include "UeGui/IDialMode.hpp"
 #include "UeGui/IListViewMode.hpp"
 #include "Messages/PhoneNumber.hpp"
 
@@ -14,7 +15,8 @@ enum class CurrentView {
     Status,
     HomeMenu,
     NewSms,
-    SmsList
+    SmsList,
+    NewCall
 };
 
 class UserPort : public IUserPort
@@ -31,6 +33,7 @@ public:
 
     constexpr static unsigned NewSmsItem = 0;
     constexpr static unsigned ListSmsItem = 1;
+    constexpr static unsigned NewCallItem = 2;
 
     std::pair<CurrentView, IUeGui::BaseMode*> getCurrentMode() { return std::pair(currentView, currentMode); };
     void setCurrentMode(CurrentView curView, IUeGui::BaseMode* mode) { currentView = curView; currentMode = mode; };

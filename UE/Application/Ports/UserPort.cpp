@@ -36,6 +36,9 @@ void UserPort::handleAcceptClicked()
             if(currentItem.first && currentItem.second == UserPort::NewSmsItem) {
                 setCurrentMode(CurrentView::NewSms, &gui.setSmsComposeMode());
             }
+            else if(currentItem.first && currentItem.second == UserPort::NewCallItem){
+                setCurrentMode(CurrentView::NewCall, &gui.setDialMode());
+            }
             break;
         }
         case CurrentView::NewSms: {
@@ -46,6 +49,11 @@ void UserPort::handleAcceptClicked()
 
             menu->clearSmsText();
             showConnected();
+            break;
+        }
+        case CurrentView::NewCall:{
+            logger.logDebug("log debug: handleAcceptClicked()");
+            //to be implememented
             break;
         }
         default: {
@@ -62,6 +70,11 @@ void UserPort::handleRejectClicked()
             auto menu = (IUeGui::ISmsComposeMode*)current.second;
             menu->clearSmsText();
             showConnected();
+        }
+        case CurrentView::NewCall:{
+            logger.logDebug("log debug: handleRejectClicked()");
+            //to be implememented
+            break;
         }
         default: {
             break;
@@ -92,6 +105,7 @@ void UserPort::showConnected()
     menu->clearSelectionList();
     menu->addSelectionListItem("Compose SMS", "Create new SMS");
     menu->addSelectionListItem("View SMS", "List all your messages");
+    menu->addSelectionListItem("Make call", "Make new call");
 
     setCurrentMode(CurrentView::HomeMenu, menu);
 }
