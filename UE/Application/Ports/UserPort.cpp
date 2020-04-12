@@ -33,7 +33,8 @@ void UserPort::handleAcceptClicked()
 {
     auto current = getCurrentMode();
     switch(current.first) {
-        case CurrentView::HomeMenu: {
+        case CurrentView::HomeMenu: 
+        {
             auto currentItem = ((IUeGui::IListViewMode*)current.second)->getCurrentItemIndex();
             if(currentItem.first && currentItem.second == UserPort::NewSmsItem) 
             {
@@ -45,7 +46,8 @@ void UserPort::handleAcceptClicked()
             }
             break;
         }
-        case CurrentView::NewSms: {
+        case CurrentView::NewSms: 
+        {
             auto menu = (IUeGui::ISmsComposeMode*)current.second;
             auto recipent = menu->getPhoneNumber();
             auto text = menu->getSmsText();
@@ -54,6 +56,10 @@ void UserPort::handleAcceptClicked()
             menu->clearSmsText();
             showConnected();
             break;
+        }
+        case CurrentView::SmsList:
+        {
+            auto currentItem = ((IUeGui::IListViewMode*)current.second)->getCurrentItemIndex();
         }
         default: {
             break;
@@ -65,12 +71,22 @@ void UserPort::handleRejectClicked()
 {
     auto current = getCurrentMode();
     switch(current.first) {
-        case CurrentView::NewSms: {
+        case CurrentView::NewSms: 
+        {
             auto menu = (IUeGui::ISmsComposeMode*)current.second;
             menu->clearSmsText();
             showConnected();
         }
-        default: {
+        case CurrentView::SmsList:
+        {
+            showConnected();
+        }
+        case CurrentView::TextView:
+        {
+            showSmsList();
+        }
+        default: 
+        {
             break;
         }
     }
@@ -110,7 +126,7 @@ void UserPort::showNewSms()
 
 void UserPort::showSmsList()
 {
-    std::vector<DbMessage> messages = dbPort->getAllMessages();
+    auto messages = dbPort->getAllMessages();
     auto menu = (IUeGui::IListViewMode*) &gui.setListViewMode();
     menu->clearSelectionList();
     if(messages.empty())
@@ -119,19 +135,24 @@ void UserPort::showSmsList()
     }
     else
     {
-        for(auto m : messages)
+        for(auto& m : messages)
         {
             if(m.fromNumber == phoneNumber.value)
             {
-                menu->addSelectionListItem("To: " + m.toNumber, m.text);
+                menu->addSelectionListItem("To: " + std::to_string(m.toNumber), m.text);
             }
             else
             {
-                menu->addSelectionListItem("From: " + m.fromNumber, m.text);
+                menu->addSelectionListItem("From: " + std::to_string(m.fromNumber), m.text);
             }
         }
     }
     setCurrentMode(CurrentView::SmsList, menu);
+}
+
+void UserPort::showSms()
+{
+
 }
 
 }

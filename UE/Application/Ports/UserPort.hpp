@@ -15,7 +15,8 @@ enum class CurrentView {
     Status,
     HomeMenu,
     NewSms,
-    SmsList
+    SmsList,
+    TextView
 };
 
 class UserPort : public IUserPort
@@ -30,6 +31,7 @@ public:
     void showConnected() override;
     void showNewSms() override;
     void showSmsList() override;
+    void showSms() override;
 
     constexpr static unsigned NewSmsItem = 0;
     constexpr static unsigned ListSmsItem = 1;

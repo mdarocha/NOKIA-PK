@@ -22,6 +22,7 @@ public:
     virtual void showConnected() = 0;
     virtual void showNewSms() = 0;
     virtual void showSmsList() = 0;
+    virtual void showSms() = 0;
 };
 
 }
