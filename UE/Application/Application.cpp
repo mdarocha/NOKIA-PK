@@ -46,6 +46,11 @@ void Application::handleSendSms(common::PhoneNumber recipent, std::string messag
 {
     context.state->handleSendSms(recipent, message);
 }
+
+void Application::handleSendCallRequest(common::PhoneNumber recipient)
+{
+    context.state->handleSendCallRequest(recipient);
+}
   
 void Application::handleDisconnect()
 {
@@ -55,6 +60,11 @@ void Application::handleDisconnect()
 void Application::handleReceivedSms(common::PhoneNumber sender, std::string message)
 {
     context.state->handleReceivedSms(sender, message);
+}
+
+void Application::handleSendCallDrop(common::PhoneNumber recipient)
+{
+    context.state->handleSendCallDrop(recipient);
 }
 
 }

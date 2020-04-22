@@ -5,6 +5,7 @@
 #include "IUeGui.hpp"
 #include "UeGui/ISmsComposeMode.hpp"
 #include "UeGui/IDialMode.hpp"
+#include "UeGui/ICallMode.hpp"
 #include "UeGui/IListViewMode.hpp"
 #include "Messages/PhoneNumber.hpp"
 
@@ -16,7 +17,8 @@ enum class CurrentView {
     HomeMenu,
     NewSms,
     SmsList,
-    NewCall
+    NewCall,
+    Call
 };
 
 class UserPort : public IUserPort
@@ -30,6 +32,8 @@ public:
     void showConnecting() override;
     void showConnected() override;
     void showNewSms() override;
+    void showNotAvailable(common::PhoneNumber) override;
+    void showPeerNotResponding(common::PhoneNumber) override;
 
     constexpr static unsigned NewSmsItem = 0;
     constexpr static unsigned ListSmsItem = 1;

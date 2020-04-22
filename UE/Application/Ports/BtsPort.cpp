@@ -58,6 +58,24 @@ void BtsPort::handleMessage(BinaryMessage msg)
             handler->handleReceivedSms(from, message);
             break;
         }
+        case common::MessageId::CallAccepted:
+        {
+            logger.logDebug("recived Call accepted");
+            //to be implemented
+            break;
+        }
+        case common::MessageId::CallDropped:
+        {
+            logger.logDebug("recived Call dropped");
+            //to be implemented
+            break;
+        }
+        case common::MessageId::UnknownRecipient:
+        {
+            logger.logDebug("recived Unknown Recipient");
+            //to be implemented
+            break;
+        }
         default:
             logger.logError("unknow message: ", msgId, ", from: ", from);
         }
@@ -94,4 +112,22 @@ void BtsPort::sendSms(common::PhoneNumber recipent, std::string message)
     msg.writeText(message);
     transport.sendMessage(msg.getMessage());
 }
+
+void BtsPort::sendCallRequest(common::PhoneNumber recipient)
+{
+    logger.logDebug("sendCallReuest: ", recipient);
+    common::OutgoingMessage msg{common::MessageId::CallRequest,
+                               phoneNumber,
+                               recipient};
+    transport.sendMessage(msg.getMessage());
+}
+
+void BtsPort::sendCallDrop(common::PhoneNumber recipient)
+{
+    logger.logDebug("sendCallDrop: ", recipient);
+    common::OutgoingMessage msg{common::MessageId::CallDropped,
+                               phoneNumber,
+                               recipient};
+}
+
 }

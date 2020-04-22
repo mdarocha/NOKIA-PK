@@ -22,10 +22,12 @@ public:
     void handleAttachReject() override;
     void handleReceivedSms(common::PhoneNumber sender, std::string message) override;
     void handleDisconnect() override;
+    void handleSendCallDrop(common::PhoneNumber) override;
 
 
     //IUserEventsHandler interface
     void handleSendSms(common::PhoneNumber recipent, std::string message) override;
+    void handleSendCallRequest(common::PhoneNumber) override;
 protected:
     Context& context;
 

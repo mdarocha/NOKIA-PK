@@ -53,12 +53,23 @@ void UserPort::handleAcceptClicked()
         }
         case CurrentView::NewCall:{
             logger.logDebug("log debug: handleAcceptClicked()");
-            //to be implememented
+            auto mode = (IUeGui::IDialMode*)current.second;
+            auto recipient = mode->getPhoneNumber();
+
+            setCurrentMode(CurrentView::Call, &gui.setCallMode());
+            handler->handleSendCallRequest(recipient);
+
+            auto newMode = (IUeGui::ICallMode*) currentMode;
+            newMode->appendIncomingText("Calling to "+to_string(recipient));
+            break;
+        }
+        case CurrentView::Call:{
+            //to be implemented
             break;
         }
         default: {
             break;
-         }
+        }
     }
 }
 
@@ -72,8 +83,7 @@ void UserPort::handleRejectClicked()
             showConnected();
         }
         case CurrentView::NewCall:{
-            logger.logDebug("log debug: handleRejectClicked()");
-            //to be implememented
+            showConnected();
             break;
         }
         default: {
@@ -113,6 +123,17 @@ void UserPort::showConnected()
 void UserPort::showNewSms()
 {
     gui.showNewSms();
+}
+
+void UserPort::showNotAvailable(common::PhoneNumber recipient)
+{
+    gui.showPeerUserNotAvailable(recipient);
+}
+
+void UserPort::showPeerNotResponding(common::PhoneNumber recipient)
+{
+    handler->handleSendCallDrop(recipient);
+    showConnected();
 }
 
 }
