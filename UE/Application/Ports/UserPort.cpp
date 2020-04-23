@@ -1,5 +1,7 @@
 #include "UserPort.hpp"
 #include "UeGui/IListViewMode.hpp"
+#include "UeGui/ITextMode.hpp"
+#include <sstream>
 
 namespace ue
 {
@@ -60,6 +62,11 @@ void UserPort::handleAcceptClicked()
         case CurrentView::SmsList:
         {
             auto currentItem = ((IUeGui::IListViewMode*)current.second)->getCurrentItemIndex();
+            if(currentItem.first)
+            {
+                showSms(currentItem.second + 1);
+            }
+            break;
         }
         default: {
             break;
@@ -76,14 +83,17 @@ void UserPort::handleRejectClicked()
             auto menu = (IUeGui::ISmsComposeMode*)current.second;
             menu->clearSmsText();
             showConnected();
+            break;
         }
         case CurrentView::SmsList:
         {
             showConnected();
+            break;
         }
         case CurrentView::TextView:
         {
             showSmsList();
+            break;
         }
         default: 
         {
@@ -150,9 +160,24 @@ void UserPort::showSmsList()
     setCurrentMode(CurrentView::SmsList, menu);
 }
 
-void UserPort::showSms()
+void UserPort::showSms(int id)
 {
+    auto menu = (IUeGui::ITextMode*) &gui.setViewTextMode();
+    DbMessage message = dbPort->getMessage(id);
+    std::ostringstream messageString;
 
+    if(message.fromNumber == phoneNumber.value)
+    {
+        messageString << "To: " << message.toNumber;
+    }
+    else
+    {
+        messageString << "From: " << message.fromNumber;
+    }
+    messageString << std::endl << "---------" << std::endl;
+    messageString << message.text << std::endl;
+    menu->setText(messageString.str());
+    setCurrentMode(CurrentView::TextView, menu);
 }
 
 }

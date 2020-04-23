@@ -19,7 +19,7 @@ struct DbMessage
     std::string text;
     int fromNumber;
     int toNumber;
-    MessageStatus status;
+    int status;
 };
 
 class IDbPort
@@ -30,6 +30,7 @@ public:
     virtual int saveSentSms(const common::PhoneNumber& to, const std::string& message) = 0;
     virtual int saveReceivedSms(const common::PhoneNumber& from, const std::string& message) = 0;
     virtual std::vector<DbMessage> getAllMessages() = 0;
+    virtual DbMessage getMessage(int id) = 0;
 };
 
 }

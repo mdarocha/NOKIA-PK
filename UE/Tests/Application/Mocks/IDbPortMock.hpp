@@ -14,6 +14,8 @@ public:
 
     MOCK_METHOD(int, saveSentSms, (const common::PhoneNumber&, const std::string&), (final));
     MOCK_METHOD(int, saveReceivedSms, (const common::PhoneNumber&, const std::string&), (final));
+    MOCK_METHOD(std::vector<DbMessage>, getAllMessages, (), (final));
+    MOCK_METHOD(DbMessage, getMessage, (int id), (final));
 };
 
 }

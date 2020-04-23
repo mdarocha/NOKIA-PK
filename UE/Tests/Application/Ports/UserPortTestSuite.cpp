@@ -6,6 +6,7 @@
 #include "Mocks/IUserPortMock.hpp"
 #include "Messages/PhoneNumber.hpp"
 #include "Mocks/IUeGuiMock.hpp"
+#include "Mocks/IDbPortMock.hpp"
 
 namespace ue
 {
@@ -20,6 +21,7 @@ protected:
     StrictMock<IUeGuiMock> guiMock;
     StrictMock<IListViewModeMock> listViewModeMock;
     StrictMock<ISmsComposeModeMock> smsComposeModeMock;
+    StrictMock<IDbPortMock> dbPortMock;
 
     IUeGui::Callback acceptCallback;
     IUeGui::Callback rejectCallback;
@@ -34,7 +36,7 @@ protected:
         EXPECT_CALL(guiMock, setRejectCallback(_))
             .WillOnce(SaveArg<0>(&rejectCallback));
 
-        objectUnderTest.start(handlerMock);
+        objectUnderTest.start(handlerMock, dbPortMock);
     }
     ~UserPortTestSuite()
     {

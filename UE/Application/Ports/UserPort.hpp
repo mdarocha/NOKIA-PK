@@ -31,7 +31,7 @@ public:
     void showConnected() override;
     void showNewSms() override;
     void showSmsList() override;
-    void showSms() override;
+    void showSms(int id) override;
 
     constexpr static unsigned NewSmsItem = 0;
     constexpr static unsigned ListSmsItem = 1;
