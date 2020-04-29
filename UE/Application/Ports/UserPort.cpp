@@ -143,4 +143,11 @@ void UserPort::showPeerConnected(common::PhoneNumber recipient)
     mode->appendIncomingText("Now you can talk");
 }
 
+void UserPort::showCallDropped(common::PhoneNumber recipient)
+{
+    auto mode = (IUeGui::ICallMode *)currentMode;
+    mode->appendIncomingText("Peer drop call");
+    showConnected();
+}
+
 }

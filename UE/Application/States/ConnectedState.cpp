@@ -43,11 +43,18 @@ void ConnectedState::handleSendCallDrop(common::PhoneNumber recipient)
     context.bts.sendCallDrop(recipient);
 }
 
-void ConnectedState::handleReciveCallAccepted(common::PhoneNumber recipient)
+void ConnectedState::handleReceivedCallAccepted(common::PhoneNumber recipient)
 {
     context.logger.logDebug("Recived Call Accepted from ", recipient);
     context.user.showPeerConnected(recipient);
     context.setState<TalkingState>(recipient);
+}
+
+
+void ConnectedState::handleReceivedCallDropped(common::PhoneNumber recipient)
+{
+    context.logger.logDebug("Recived Call dropped from ", recipient);
+    context.user.showCallDropped(recipient);
 }
 
 }

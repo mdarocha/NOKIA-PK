@@ -26,6 +26,7 @@ public:
     virtual void showNotAvailable(common::PhoneNumber) = 0;
     virtual void showPeerNotResponding(common::PhoneNumber) = 0;
     virtual void showPeerConnected(common::PhoneNumber) = 0;
+    virtual void showCallDropped(common::PhoneNumber) = 0;
 };
 
 }
