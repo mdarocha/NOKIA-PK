@@ -13,6 +13,7 @@ public:
     ~IUserEventsHandlerMock() override;
 
     MOCK_METHOD(void, handleSendSms, (common::PhoneNumber, std::string), (final));
+    MOCK_METHOD(void, handleSendCallAccept, (common::PhoneNumber), (final));
 };
 
 class IUserPortMock : public IUserPort
@@ -25,6 +26,7 @@ public:
     MOCK_METHOD(void, showConnecting, (), (final));
     MOCK_METHOD(void, showConnected, (), (final));
     MOCK_METHOD(void, showNewSms, (), (final));
+    MOCK_METHOD(void, showCallRequest, (common::PhoneNumber), (final));
 };
 
 }

@@ -57,4 +57,14 @@ void Application::handleReceivedSms(common::PhoneNumber sender, std::string mess
     context.state->handleReceivedSms(sender, message);
 }
 
+void Application::handleReceivedCallRequest(common::PhoneNumber recipient)
+{
+    context.state->handleReceivedCallRequest(recipient);
+}
+
+void Application::handleSendCallAccept(common::PhoneNumber recipient)
+{
+    context.state->handleSendCallAccept(recipient);
+}
+
 }

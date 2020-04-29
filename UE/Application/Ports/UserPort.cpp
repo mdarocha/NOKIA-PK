@@ -1,5 +1,6 @@
 #include "UserPort.hpp"
 #include "UeGui/IListViewMode.hpp"
+#include "UeGui/ICallMode.hpp"
 
 namespace ue
 {
@@ -46,6 +47,11 @@ void UserPort::handleAcceptClicked()
 
             menu->clearSmsText();
             showConnected();
+            break;
+        }
+        case CurrentView::Call:
+        {
+            handler->handleSendCallAccept(recipientPhoneNumber);
             break;
         }
         default: {
@@ -99,6 +105,14 @@ void UserPort::showConnected()
 void UserPort::showNewSms()
 {
     gui.showNewSms();
+}
+
+void UserPort::showCallRequest(common::PhoneNumber recipient)
+{
+    recipientPhoneNumber = recipient;
+    setCurrentMode(CurrentView::Call, &gui.setCallMode());
+    auto info = (IUeGui::ICallMode*) currentMode;
+    info->appendIncomingText("From " + to_string(recipient));
 }
 
 }

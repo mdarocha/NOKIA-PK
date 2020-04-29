@@ -123,6 +123,15 @@ TEST_F(BtsPortTestSuite, shallHandleReceivedSms)
                                 PHONE_NUMBER};
     messageCallback(msg.getMessage());
 }
+
+TEST_F(BtsPortTestSuite, shallHandleReceivedCallRequest)
+{
+    EXPECT_CALL(handlerMock, handleReceivedCallRequest);
+    common::OutgoingMessage msg{common::MessageId::CallRequest,
+                                common::PhoneNumber{},
+                                PHONE_NUMBER};
+    messageCallback(msg.getMessage());
+}
   
 TEST_F(BtsPortTestSuite, shallHandleDisconnect)
 {

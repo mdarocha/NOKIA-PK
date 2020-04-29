@@ -14,7 +14,8 @@ enum class CurrentView {
     Status,
     HomeMenu,
     NewSms,
-    SmsList
+    SmsList,
+    Call
 };
 
 class UserPort : public IUserPort
@@ -28,6 +29,7 @@ public:
     void showConnecting() override;
     void showConnected() override;
     void showNewSms() override;
+    void showCallRequest(common::PhoneNumber) override;
 
     constexpr static unsigned NewSmsItem = 0;
     constexpr static unsigned ListSmsItem = 1;
@@ -47,6 +49,7 @@ private:
     IUeGui& gui;
 
     common::PhoneNumber phoneNumber;
+    common::PhoneNumber recipientPhoneNumber;
     IUserEventsHandler* handler = nullptr;
 };
 

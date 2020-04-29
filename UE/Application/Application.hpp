@@ -31,10 +31,12 @@ public:
     void handleAttachAccept() override;
     void handleAttachReject() override;
     void handleReceivedSms(common::PhoneNumber sender, std::string message) override;
+    void handleReceivedCallRequest(common::PhoneNumber recipient) override;
     void handleDisconnect() override;
 
     //IUserEventsHandler interface
     void handleSendSms(common::PhoneNumber recipent, std::string message) override;
+    void handleSendCallAccept(common::PhoneNumber recipent) override;
 private:
     Context context;
     common::PrefixedLogger logger;

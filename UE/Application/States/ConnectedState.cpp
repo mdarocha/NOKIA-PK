@@ -1,4 +1,5 @@
 #include "ConnectedState.hpp"
+#include "TalkingState.hpp"
 
 namespace ue
 {
@@ -20,6 +21,16 @@ void ConnectedState::handleReceivedSms(common::PhoneNumber sender, std::string m
 {
     context.db.saveReceivedSms(sender, message);
     context.user.showNewSms();
+}
+
+void ConnectedState::handleReceivedCallRequest(common::PhoneNumber recipient)
+{
+    context.user.showCallRequest(recipient);
+}
+
+void ConnectedState::handleSendCallAccept(common::PhoneNumber recipient)
+{
+    context.setState<TalkingState>(recipient);
 }
 
 }
