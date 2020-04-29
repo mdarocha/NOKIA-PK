@@ -57,6 +57,7 @@ private:
     IUeGui& gui;
 
     common::PhoneNumber phoneNumber;
+    common::PhoneNumber recipientPhoneNumber;
     IUserEventsHandler* handler = nullptr;
 };
 

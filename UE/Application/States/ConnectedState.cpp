@@ -40,12 +40,14 @@ void ConnectedState::handleTimeout()
 void ConnectedState::handleSendCallDrop(common::PhoneNumber recipient)
 {
     context.logger.logDebug("Send call drop to", recipient);
+    context.timer.stopTimer();
     context.bts.sendCallDrop(recipient);
 }
 
 void ConnectedState::handleReceivedCallAccepted(common::PhoneNumber recipient)
 {
     context.logger.logDebug("Recived Call Accepted from ", recipient);
+    context.timer.stopTimer();
     context.user.showPeerConnected(recipient);
     context.setState<TalkingState>(recipient);
 }
@@ -54,12 +56,14 @@ void ConnectedState::handleReceivedCallAccepted(common::PhoneNumber recipient)
 void ConnectedState::handleReceivedCallDropped(common::PhoneNumber recipient)
 {
     context.logger.logDebug("Recived Call dropped from ", recipient);
+    context.timer.stopTimer();
     context.user.showCallDropped(recipient);
 }
 
 void ConnectedState::handlePeerNotConnected(common::PhoneNumber recipient)
 {
     context.logger.logDebug("Recieved Unknown Recipient after CallRequest");
+    context.timer.stopTimer();
     context.user.showPeerNotConnected(recipient);
 }
 

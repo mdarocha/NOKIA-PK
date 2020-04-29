@@ -54,13 +54,13 @@ void UserPort::handleAcceptClicked()
         case CurrentView::NewCall:{
             logger.logDebug("log debug: handleAcceptClicked()");
             auto mode = (IUeGui::IDialMode*)current.second;
-            auto recipient = mode->getPhoneNumber();
+            recipientPhoneNumber = mode->getPhoneNumber();
 
             setCurrentMode(CurrentView::Call, &gui.setCallMode());
-            handler->handleSendCallRequest(recipient);
+            handler->handleSendCallRequest(recipientPhoneNumber);
 
             auto newMode = (IUeGui::ICallMode*) currentMode;
-            newMode->appendIncomingText("Calling to "+to_string(recipient));
+            newMode->appendIncomingText("Calling to "+to_string(recipientPhoneNumber));
             break;
         }
         case CurrentView::Call:{
@@ -83,6 +83,13 @@ void UserPort::handleRejectClicked()
             showConnected();
         }
         case CurrentView::NewCall:{
+            showConnected();
+            break;
+        }
+        case CurrentView::Call:{
+            handler->handleSendCallDrop(recipientPhoneNumber);
+            auto menu = (IUeGui::ICallMode*)current.second;
+            menu->appendIncomingText("Call resignation "+to_string(recipientPhoneNumber));
             showConnected();
             break;
         }
