@@ -25,6 +25,7 @@ public:
     virtual void showNewSms() = 0;
     virtual void showNotAvailable(common::PhoneNumber) = 0;
     virtual void showPeerNotResponding(common::PhoneNumber) = 0;
+    virtual void showPeerConnected(common::PhoneNumber) = 0;
 };
 
 }

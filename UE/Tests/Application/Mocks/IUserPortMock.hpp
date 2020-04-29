@@ -29,6 +29,7 @@ public:
     MOCK_METHOD(void, showNewSms, (), (final));
     MOCK_METHOD(void, showNotAvailable, (common::PhoneNumber), (final));
     MOCK_METHOD(void, showPeerNotResponding, (common::PhoneNumber),(final));
+    MOCK_METHOD(void, showPeerConnected, (common::PhoneNumber),(final));
 };
 
 }

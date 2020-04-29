@@ -1,4 +1,5 @@
 #include "ConnectedState.hpp"
+#include "TalkingState.hpp"
 
 namespace ue
 {
@@ -40,6 +41,13 @@ void ConnectedState::handleSendCallDrop(common::PhoneNumber recipient)
 {
     context.logger.logDebug("Send call drop to", recipient);
     context.bts.sendCallDrop(recipient);
+}
+
+void ConnectedState::handleReciveCallAccepted(common::PhoneNumber recipient)
+{
+    context.logger.logDebug("Recived Call Accepted from ", recipient);
+    context.user.showPeerConnected(recipient);
+    context.setState<TalkingState>(recipient);
 }
 
 }

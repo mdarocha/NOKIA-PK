@@ -12,6 +12,7 @@ public:
     void handleSendSms(common::PhoneNumber recipent, std::string message) final;
     void handleSendCallRequest(common::PhoneNumber recipient) final;
     void handleReceivedSms(common::PhoneNumber sender, std::string message) final;
+    void handleReciveCallAccepted(common::PhoneNumber) final;
     void handleSendCallDrop(common::PhoneNumber) final;
     void handleTimeout() final;
 };

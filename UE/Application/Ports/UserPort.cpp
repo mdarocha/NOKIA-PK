@@ -136,4 +136,11 @@ void UserPort::showPeerNotResponding(common::PhoneNumber recipient)
     showConnected();
 }
 
+void UserPort::showPeerConnected(common::PhoneNumber recipient)
+{
+    auto mode = (IUeGui::ICallMode *)currentMode;
+    mode->appendIncomingText("Connected to "+to_string(recipient));
+    mode->appendIncomingText("Now you can talk");
+}
+
 }
