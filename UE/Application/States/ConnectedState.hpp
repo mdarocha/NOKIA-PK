@@ -15,6 +15,7 @@ public:
     void handleReceivedCallAccepted(common::PhoneNumber) final;
     void handleReceivedCallDropped(common::PhoneNumber) final;
     void handleSendCallDrop(common::PhoneNumber) final;
+    void handlePeerNotConnected(common::PhoneNumber) final;
     void handleTimeout() final;
 };
 

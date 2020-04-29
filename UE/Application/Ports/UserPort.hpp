@@ -33,9 +33,10 @@ public:
     void showConnected() override;
     void showNewSms() override;
     void showNotAvailable(common::PhoneNumber) override;
-    void showPeerNotResponding(common::PhoneNumber) override;
+    void showPeerNotConnected(common::PhoneNumber) override;
     void showPeerConnected(common::PhoneNumber) override;
     void showCallDropped(common::PhoneNumber) override;
+    void showPeerNotResponding(common::PhoneNumber) override;
 
     constexpr static unsigned NewSmsItem = 0;
     constexpr static unsigned ListSmsItem = 1;

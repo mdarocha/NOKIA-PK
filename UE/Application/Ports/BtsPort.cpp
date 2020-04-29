@@ -73,7 +73,16 @@ void BtsPort::handleMessage(BinaryMessage msg)
         case common::MessageId::UnknownRecipient:
         {
             logger.logDebug("recived Unknown Recipient");
-            //to be implemented
+            auto failMsgId = reader.readMessageId();
+            auto failFrom = reader.readPhoneNumber();
+            auto failTo = reader.readPhoneNumber();
+            switch (failMsgId) {
+                case common::MessageId::CallRequest:
+                    handler->handlePeerNotConnected(failTo);
+                    break;
+                default:
+                    logger.logError("[Unknown Recipient] unknow message: ", failMsgId, ", from: ", failFrom);
+            }
             break;
         }
         default:

@@ -130,9 +130,10 @@ void UserPort::showNotAvailable(common::PhoneNumber recipient)
     gui.showPeerUserNotAvailable(recipient);
 }
 
-void UserPort::showPeerNotResponding(common::PhoneNumber recipient)
+void UserPort::showPeerNotConnected(common::PhoneNumber recipient)
 {
-    handler->handleSendCallDrop(recipient);
+    auto mode = (IUeGui::ICallMode *)currentMode;
+    mode->appendIncomingText("Peer "+to_string(recipient)+" is not available");
     showConnected();
 }
 
@@ -150,4 +151,11 @@ void UserPort::showCallDropped(common::PhoneNumber recipient)
     showConnected();
 }
 
+void UserPort::showPeerNotResponding(common::PhoneNumber recipient)
+{
+    auto mode = (IUeGui::ICallMode *)currentMode;
+    mode->appendIncomingText("Peer "+to_string(recipient)+" is not responding");
+    handler->handleSendCallDrop(recipient);
+    showConnected();
+}
 }

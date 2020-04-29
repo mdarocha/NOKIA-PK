@@ -57,4 +57,10 @@ void ConnectedState::handleReceivedCallDropped(common::PhoneNumber recipient)
     context.user.showCallDropped(recipient);
 }
 
+void ConnectedState::handlePeerNotConnected(common::PhoneNumber recipient)
+{
+    context.logger.logDebug("Recieved Unknown Recipient after CallRequest");
+    context.user.showPeerNotConnected(recipient);
+}
+
 }

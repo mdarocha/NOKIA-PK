@@ -66,10 +66,14 @@ void BaseState::handleReceivedCallAccepted(common::PhoneNumber recipient)
     logger.logError("Unexpected: handleReceivedCallAccepted from", recipient);
 }
 
-
 void BaseState::handleReceivedCallDropped(common::PhoneNumber recipient)
 {
     logger.logError("Unexpected: handleReceivedCallDropped from", recipient);
+}
+
+void BaseState::handlePeerNotConnected(common::PhoneNumber recipient)
+{
+    logger.logError("Unexpected: handleUnknownRecipient after CallRequest");
 }
 
 

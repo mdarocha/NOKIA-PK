@@ -18,6 +18,7 @@ public:
     MOCK_METHOD(void, handleReceivedSms, (common::PhoneNumber, std::string), (final));
     MOCK_METHOD(void, handleReceivedCallAccepted, (common::PhoneNumber), (final));
     MOCK_METHOD(void, handleReceivedCallDropped, (common::PhoneNumber), (final));
+    MOCK_METHOD(void, handlePeerNotConnected, (common::PhoneNumber), (final));
     MOCK_METHOD(void, handleDisconnect, (), (final));
 
 };

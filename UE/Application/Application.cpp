@@ -77,4 +77,10 @@ void Application::handleReceivedCallDropped(common::PhoneNumber recpient)
     context.state->handleReceivedCallDropped(recpient);
 }
 
+void Application::handlePeerNotConnected(common::PhoneNumber recipient)
+{
+    context.state->handlePeerNotConnected(recipient);
+
+}
+
 }
