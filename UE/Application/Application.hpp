@@ -37,6 +37,7 @@ public:
     //IUserEventsHandler interface
     void handleSendSms(common::PhoneNumber recipent, std::string message) override;
     void handleSendCallAccept(common::PhoneNumber recipent) override;
+    void handleSendCallDropped(common::PhoneNumber recipent) override;
 private:
     Context context;
     common::PrefixedLogger logger;

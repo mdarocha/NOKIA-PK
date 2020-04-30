@@ -14,6 +14,7 @@ public:
 
     MOCK_METHOD(void, handleSendSms, (common::PhoneNumber, std::string), (final));
     MOCK_METHOD(void, handleSendCallAccept, (common::PhoneNumber), (final));
+    MOCK_METHOD(void, handleSendCallDropped, (common::PhoneNumber), (final));
 };
 
 class IUserPortMock : public IUserPort

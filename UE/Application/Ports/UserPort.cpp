@@ -69,6 +69,11 @@ void UserPort::handleRejectClicked()
             menu->clearSmsText();
             showConnected();
         }
+        case CurrentView::Call:
+        {
+            handler->handleSendCallDropped(recipientPhoneNumber);
+            break;
+        }
         default: {
             break;
         }

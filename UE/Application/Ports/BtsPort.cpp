@@ -111,4 +111,14 @@ void BtsPort::sendCallAccept(common::PhoneNumber recipient)
     transport.sendMessage(msg.getMessage());
 }
 
+void BtsPort::sendCallDropped(common::PhoneNumber recipient)
+{
+    logger.logDebug("sendCallDropped: ", recipient);
+    common::OutgoingMessage msg{common::MessageId::CallDropped,
+                                phoneNumber,
+                                recipient};
+
+    transport.sendMessage(msg.getMessage());
+}
+
 }

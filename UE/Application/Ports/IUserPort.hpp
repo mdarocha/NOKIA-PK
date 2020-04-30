@@ -11,6 +11,7 @@ public:
 
     virtual void handleSendSms(common::PhoneNumber recipent, std::string message) = 0;
     virtual void handleSendCallAccept(common::PhoneNumber recipient) = 0;
+    virtual void handleSendCallDropped(common::PhoneNumber recipient) = 0;
 };
 
 class IUserPort

@@ -28,6 +28,7 @@ public:
     //IUserEventsHandler interface
     void handleSendSms(common::PhoneNumber recipent, std::string message) override;
     void handleSendCallAccept(common::PhoneNumber recipient) override;
+    void handleSendCallDropped(common::PhoneNumber recipient) override;
 protected:
     Context& context;
 

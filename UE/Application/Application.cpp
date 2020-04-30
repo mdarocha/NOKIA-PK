@@ -67,4 +67,9 @@ void Application::handleSendCallAccept(common::PhoneNumber recipient)
     context.state->handleSendCallAccept(recipient);
 }
 
+void Application::handleSendCallDropped(common::PhoneNumber recipient)
+{
+    context.state->handleSendCallDropped(recipient);
+}
+
 }

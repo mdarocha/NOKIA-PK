@@ -33,4 +33,10 @@ void ConnectedState::handleSendCallAccept(common::PhoneNumber recipient)
     context.setState<TalkingState>(recipient);
 }
 
+void ConnectedState::handleSendCallDropped(common::PhoneNumber recipient)
+{
+    context.user.showConnected();
+    context.bts.sendCallDropped(recipient);
+}
+
 }
