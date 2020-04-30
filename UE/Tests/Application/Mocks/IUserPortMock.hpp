@@ -31,7 +31,7 @@ public:
     MOCK_METHOD(void, showPeerNotConnected, (common::PhoneNumber),(final));
     MOCK_METHOD(void, showPeerConnected, (common::PhoneNumber),(final));
     MOCK_METHOD(void, showCallDropped, (common::PhoneNumber),(final));
-    MOCK_METHOD(void, showPeerNotResponding, (common::PhoneNumber),(final));
+    MOCK_METHOD(void, callTimeout, (),(final));
 };
 
 }

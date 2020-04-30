@@ -72,16 +72,21 @@ void BtsPort::handleMessage(BinaryMessage msg)
         }
         case common::MessageId::UnknownRecipient:
         {
-            logger.logDebug("recived Unknown Recipient");
             auto failMsgId = reader.readMessageId();
             auto failFrom = reader.readPhoneNumber();
             auto failTo = reader.readPhoneNumber();
             switch (failMsgId) {
                 case common::MessageId::CallRequest:
+                {
                     handler->handlePeerNotConnected(failTo);
                     break;
+                }
+                case common::MessageId::CallDropped:{
+                    logger.logDebug("Recieved unknow recipient after CallDropped");
+                    break;
+                }
                 default:
-                    logger.logError("[Unknown Recipient] unknow message: ", failMsgId, ", from: ", failFrom);
+                    logger.logError("Recieved unknow recipient of unknow message: ", failMsgId, ", from: ", failFrom);
             }
             break;
         }
@@ -134,9 +139,11 @@ void BtsPort::sendCallRequest(common::PhoneNumber recipient)
 void BtsPort::sendCallDrop(common::PhoneNumber recipient)
 {
     logger.logDebug("sendCallDrop: ", recipient);
-    common::OutgoingMessage msg{common::MessageId::CallDropped,
-                               phoneNumber,
-                               recipient};
+    common::OutgoingMessage msg{};
+    msg.writeMessageId(common::MessageId::CallDropped);
+    msg.writePhoneNumber(phoneNumber);
+    msg.writePhoneNumber(recipient);
+    transport.sendMessage(msg.getMessage());
 }
 
 }

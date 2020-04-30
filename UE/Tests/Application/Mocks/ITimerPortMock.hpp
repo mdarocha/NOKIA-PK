@@ -23,9 +23,7 @@ public:
     ~ITimerPortMock() override;
 
     MOCK_METHOD(void, startTimer, (ITimerPort::Duration), (final));
-    MOCK_METHOD(void, startTimer, (ITimerPort::Duration, common::PhoneNumber), (final));
     MOCK_METHOD(void, stopTimer, (), (final));
-    MOCK_METHOD(common::PhoneNumber, getRecipient,(),(final));
 };
 
 }

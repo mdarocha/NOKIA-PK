@@ -84,10 +84,12 @@ void UserPort::handleRejectClicked()
             break;
         }
         case CurrentView::NewCall:{
+            logger.logDebug("Back to main menu");
             showConnected();
             break;
         }
         case CurrentView::Call:{
+            logger.logDebug("Call resignation");
             handler->handleSendCallDrop(recipientPhoneNumber);
             auto menu = (IUeGui::ICallMode*)current.second;
             menu->appendIncomingText("Call resignation "+to_string(recipientPhoneNumber));
@@ -159,11 +161,10 @@ void UserPort::showCallDropped(common::PhoneNumber recipient)
     showConnected();
 }
 
-void UserPort::showPeerNotResponding(common::PhoneNumber recipient)
+void UserPort::callTimeout()
 {
-    auto mode = (IUeGui::ICallMode *)currentMode;
-    mode->appendIncomingText("Peer "+to_string(recipient)+" is not responding");
-    handler->handleSendCallDrop(recipient);
+    handler->handleSendCallDrop(recipientPhoneNumber);
     showConnected();
 }
+
 }

@@ -22,9 +22,7 @@ public:
     virtual ~ITimerPort() = default;
 
     virtual void startTimer(Duration) = 0;
-    virtual void startTimer(Duration, common::PhoneNumber) = 0;
     virtual void stopTimer() = 0;
-    virtual common::PhoneNumber getRecipient() = 0;
 };
 
 }
