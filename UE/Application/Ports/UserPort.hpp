@@ -30,6 +30,7 @@ public:
     void showConnected() override;
     void showNewSms() override;
     void showCallRequest(common::PhoneNumber) override;
+    void showPeerUserDisconnected() override;
 
     constexpr static unsigned NewSmsItem = 0;
     constexpr static unsigned ListSmsItem = 1;

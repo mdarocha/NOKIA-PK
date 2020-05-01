@@ -33,6 +33,8 @@ public:
     void handleReceivedSms(common::PhoneNumber sender, std::string message) override;
     void handleReceivedCallRequest(common::PhoneNumber recipient) override;
     void handleDisconnect() override;
+    void handleUnknownRecipientAfterCallAccepted() override;
+
 
     //IUserEventsHandler interface
     void handleSendSms(common::PhoneNumber recipent, std::string message) override;

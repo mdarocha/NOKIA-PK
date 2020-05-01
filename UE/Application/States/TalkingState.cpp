@@ -15,4 +15,8 @@ void TalkingState::handleSendCallAccept(common::PhoneNumber recipient){
     context.bts.sendCallAccept(recipient);
 }
 
+void TalkingState::handleUnknownRecipientAfterCallAccepted(){
+    context.user.showPeerUserDisconnected();
+}
+
 }

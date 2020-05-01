@@ -24,6 +24,7 @@ public:
     virtual void showConnected() = 0;
     virtual void showNewSms() = 0;
     virtual void showCallRequest(common::PhoneNumber) = 0;
+    virtual void showPeerUserDisconnected() = 0;
 };
 
 }

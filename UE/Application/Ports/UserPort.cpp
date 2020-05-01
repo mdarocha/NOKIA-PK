@@ -121,4 +121,10 @@ void UserPort::showCallRequest(common::PhoneNumber recipient)
     info->appendIncomingText("From " + to_string(recipient));
 }
 
+void UserPort::showPeerUserDisconnected()
+{
+    auto info = (IUeGui::ICallMode*) currentMode;
+    info->appendIncomingText("Unknown recipient");
+}
+
 }
