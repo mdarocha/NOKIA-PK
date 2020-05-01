@@ -14,6 +14,7 @@ public:
     void handleReceivedCallRequest(common::PhoneNumber recipient) final;
     void handleSendCallAccept(common::PhoneNumber recipient) final;
     void handleSendCallDropped(common::PhoneNumber recipient) final;
+    void handleTimeout() final;
 };
 
 }

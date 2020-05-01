@@ -25,6 +25,8 @@ void ConnectedState::handleReceivedSms(common::PhoneNumber sender, std::string m
 
 void ConnectedState::handleReceivedCallRequest(common::PhoneNumber recipient)
 {
+    using namespace std::chrono_literals;
+    context.timer.startTimer(30000ms);
     context.user.showCallRequest(recipient);
 }
 
@@ -37,6 +39,14 @@ void ConnectedState::handleSendCallDropped(common::PhoneNumber recipient)
 {
     context.user.showConnected();
     context.bts.sendCallDropped(recipient);
+}
+
+void ConnectedState::handleTimeout()
+{
+   context.logger.logDebug("hanldeTimeoutConnectedState");
+//   context.user.showConnected();
+//   context.bts.sendCallDropped();
+//   handleSendCallDropped()
 }
 
 }

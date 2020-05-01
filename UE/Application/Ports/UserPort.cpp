@@ -68,6 +68,7 @@ void UserPort::handleRejectClicked()
             auto menu = (IUeGui::ISmsComposeMode*)current.second;
             menu->clearSmsText();
             showConnected();
+            break;
         }
         case CurrentView::Call:
         {

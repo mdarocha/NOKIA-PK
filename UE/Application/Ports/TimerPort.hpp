@@ -21,6 +21,10 @@ public:
 private:
     common::PrefixedLogger logger;
     ITimerEventsHandler* handler = nullptr;
+
+    bool clearTimer = false;
+
+    void setTimeOut(Duration);
 };
 
 }
