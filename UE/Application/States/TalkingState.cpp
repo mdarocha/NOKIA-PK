@@ -11,10 +11,6 @@ TalkingState::TalkingState(Context &context,common::PhoneNumber number)
 //    context.timer.stopTimer();
 }
 
-void TalkingState::handleSendCallAccept(common::PhoneNumber recipient){
-    context.bts.sendCallAccept(recipient);
-}
-
 void TalkingState::handleUnknownRecipientAfterCallAccepted(){
     context.user.showPeerUserDisconnected();
 }

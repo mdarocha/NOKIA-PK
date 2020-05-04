@@ -15,6 +15,7 @@ enum class CurrentView {
     HomeMenu,
     NewSms,
     SmsList,
+    IncomingCall,
     Call
 };
 

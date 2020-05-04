@@ -49,9 +49,10 @@ void UserPort::handleAcceptClicked()
             showConnected();
             break;
         }
-        case CurrentView::Call:
+        case CurrentView::IncomingCall:
         {
             handler->handleSendCallAccept(recipientPhoneNumber);
+            setCurrentMode(CurrentView::Call, &gui.setCallMode());
             break;
         }
         default: {
@@ -70,7 +71,7 @@ void UserPort::handleRejectClicked()
             showConnected();
             break;
         }
-        case CurrentView::Call:
+        case CurrentView::IncomingCall:
         {
             handler->handleSendCallDropped(recipientPhoneNumber);
             break;
@@ -116,7 +117,7 @@ void UserPort::showNewSms()
 void UserPort::showCallRequest(common::PhoneNumber recipient)
 {
     recipientPhoneNumber = recipient;
-    setCurrentMode(CurrentView::Call, &gui.setCallMode());
+    setCurrentMode(CurrentView::IncomingCall, &gui.setCallMode());
     auto info = (IUeGui::ICallMode*) currentMode;
     info->appendIncomingText("From " + to_string(recipient));
 }
