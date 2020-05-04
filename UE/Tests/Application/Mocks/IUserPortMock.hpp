@@ -15,6 +15,8 @@ public:
     MOCK_METHOD(void, handleSendSms, (common::PhoneNumber, std::string), (final));
     MOCK_METHOD(void, handleSendCallAccept, (common::PhoneNumber), (final));
     MOCK_METHOD(void, handleSendCallDropped, (common::PhoneNumber), (final));
+    MOCK_METHOD(void, handleSendCallRequest, (common::PhoneNumber), (final));
+    MOCK_METHOD(void, handleSendCallDrop, (common::PhoneNumber), (final));
 };
 
 class IUserPortMock : public IUserPort
@@ -29,6 +31,11 @@ public:
     MOCK_METHOD(void, showNewSms, (), (final));
     MOCK_METHOD(void, showCallRequest, (common::PhoneNumber), (final));
     MOCK_METHOD(void, showPeerUserDisconnected, (), (final));
+    MOCK_METHOD(void, showNotAvailable, (common::PhoneNumber), (final));
+    MOCK_METHOD(void, showPeerNotConnected, (common::PhoneNumber),(final));
+    MOCK_METHOD(void, showPeerConnected, (common::PhoneNumber),(final));
+    MOCK_METHOD(void, showCallDropped, (common::PhoneNumber),(final));
+    MOCK_METHOD(void, callTimeout, (),(final));
 };
 
 }

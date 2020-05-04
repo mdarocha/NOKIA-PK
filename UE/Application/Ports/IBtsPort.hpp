@@ -16,6 +16,9 @@ public:
     virtual void handleAttachReject() = 0;
     virtual void handleReceivedSms(common::PhoneNumber, std::string) = 0;
     virtual void handleReceivedCallRequest(common::PhoneNumber) = 0;
+    virtual void handleReceivedCallAccepted(common::PhoneNumber) = 0;
+    virtual void handleReceivedCallDropped(common::PhoneNumber) = 0;
+    virtual void handlePeerNotConnected(common::PhoneNumber) = 0;
     virtual void handleDisconnect() = 0;
     virtual void handleUnknownRecipientAfterCallAccepted() = 0;
 };
@@ -29,6 +32,7 @@ public:
     virtual void sendSms(common::PhoneNumber, std::string) = 0;
     virtual void sendCallAccept(common::PhoneNumber) = 0;
     virtual void sendCallDropped(common::PhoneNumber) = 0;
+    virtual void sendCallRequest(common::PhoneNumber) = 0;
 };
 
 }

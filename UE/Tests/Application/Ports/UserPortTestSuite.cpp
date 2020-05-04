@@ -20,6 +20,7 @@ protected:
     StrictMock<IUeGuiMock> guiMock;
     StrictMock<IListViewModeMock> listViewModeMock;
     StrictMock<ISmsComposeModeMock> smsComposeModeMock;
+    StrictMock<IDialModeMock> dialModeMock;
 
     IUeGui::Callback acceptCallback;
     IUeGui::Callback rejectCallback;
@@ -84,6 +85,19 @@ TEST_F(UserPortTestSuite, shallShowSmsComposeOnItemClick)
     auto currentMode = objectUnderTest.getCurrentMode();
     EXPECT_EQ(currentMode.first, CurrentView::NewSms);
     EXPECT_EQ(currentMode.second, &smsComposeModeMock);
+}
+
+TEST_F(UserPortTestSuite, shallShowDialOnItemClick)
+{
+    EXPECT_CALL(listViewModeMock, getCurrentItemIndex()).WillOnce(Return(std::pair<bool, unsigned>(true, UserPort::NewCallItem)));
+    EXPECT_CALL(guiMock, setDialMode()).WillOnce(ReturnRef(dialModeMock));
+
+    objectUnderTest.setCurrentMode(CurrentView::HomeMenu, &listViewModeMock);
+    acceptCallback();
+
+    auto currentMode = objectUnderTest.getCurrentMode();
+    EXPECT_EQ(currentMode.first, CurrentView::NewCall);
+    EXPECT_EQ(currentMode.second, &dialModeMock);
 }
 
 TEST_F(UserPortTestSuite, shallSendSmsEventOnSmsSend)

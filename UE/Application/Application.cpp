@@ -46,6 +46,11 @@ void Application::handleSendSms(common::PhoneNumber recipent, std::string messag
 {
     context.state->handleSendSms(recipent, message);
 }
+
+void Application::handleSendCallRequest(common::PhoneNumber recipient)
+{
+    context.state->handleSendCallRequest(recipient);
+}
   
 void Application::handleDisconnect()
 {
@@ -75,6 +80,27 @@ void Application::handleSendCallDropped(common::PhoneNumber recipient)
 void Application::handleUnknownRecipientAfterCallAccepted()
 {
     context.state->handleUnknownRecipientAfterCallAccepted();
+}
+
+void Application::handleSendCallDrop(common::PhoneNumber recipient)
+{
+    context.state->handleSendCallDrop(recipient);
+}
+
+void Application::handleReceivedCallAccepted(common::PhoneNumber recpient)
+{
+    context.state->handleReceivedCallAccepted(recpient);
+}
+
+void Application::handleReceivedCallDropped(common::PhoneNumber recpient)
+{
+    context.state->handleReceivedCallDropped(recpient);
+}
+
+void Application::handlePeerNotConnected(common::PhoneNumber recipient)
+{
+    context.state->handlePeerNotConnected(recipient);
+
 }
 
 }

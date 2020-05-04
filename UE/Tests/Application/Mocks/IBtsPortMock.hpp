@@ -17,6 +17,9 @@ public:
     MOCK_METHOD(void, handleAttachReject, (), (final));
     MOCK_METHOD(void, handleReceivedSms, (common::PhoneNumber, std::string), (final));
     MOCK_METHOD(void, handleReceivedCallRequest, (common::PhoneNumber), (final));
+    MOCK_METHOD(void, handleReceivedCallAccepted, (common::PhoneNumber), (final));
+    MOCK_METHOD(void, handleReceivedCallDropped, (common::PhoneNumber), (final));
+    MOCK_METHOD(void, handlePeerNotConnected, (common::PhoneNumber), (final));
     MOCK_METHOD(void, handleDisconnect, (), (final));
     MOCK_METHOD(void, handleUnknownRecipientAfterCallAccepted, (), (final));
 
@@ -32,6 +35,7 @@ public:
     MOCK_METHOD(void, sendSms, (common::PhoneNumber, std::string), (final));
     MOCK_METHOD(void, sendCallAccept, (common::PhoneNumber), (final));
     MOCK_METHOD(void, sendCallDropped, (common::PhoneNumber), (final));
+    MOCK_METHOD(void, sendCallRequest, (common::PhoneNumber), (final));
 };
 
 }

@@ -72,7 +72,7 @@ void BtsPort::handleMessage(BinaryMessage msg)
            switch (failMsgId) {
                case common::MessageId::CallRequest:
                {
-                   //handler->handlePeerNotConnected(failTo);
+                   handler->handlePeerNotConnected(failTo);
                    break;
                }
                case common::MessageId::CallDropped:{
@@ -87,6 +87,18 @@ void BtsPort::handleMessage(BinaryMessage msg)
            }
            break;
        }
+	case common::MessageId::CallAccepted:
+        {
+            logger.logDebug("recived Call accepted");
+            handler->handleReceivedCallAccepted(from);
+            break;
+        }
+        case common::MessageId::CallDropped:
+        {
+            logger.logDebug("recived Call dropped");
+            handler->handleReceivedCallDropped(from);
+            break;
+        }
         default:
             logger.logError("unknow message: ", msgId, ", from: ", from);
         }
@@ -134,13 +146,22 @@ void BtsPort::sendCallAccept(common::PhoneNumber recipient)
     transport.sendMessage(msg.getMessage());
 }
 
+void BtsPort::sendCallRequest(common::PhoneNumber recipient)
+{
+    logger.logDebug("sendCallReuest: ", recipient);
+    common::OutgoingMessage msg{common::MessageId::CallRequest,
+                               phoneNumber,
+                               recipient};
+    transport.sendMessage(msg.getMessage());
+}
+
 void BtsPort::sendCallDropped(common::PhoneNumber recipient)
 {
-    logger.logDebug("sendCallDropped: ", recipient);
-    common::OutgoingMessage msg{common::MessageId::CallDropped,
-                                phoneNumber,
-                                recipient};
-
+    logger.logDebug("sendCallDrop: ", recipient);
+    common::OutgoingMessage msg{};
+    msg.writeMessageId(common::MessageId::CallDropped);
+    msg.writePhoneNumber(phoneNumber);
+    msg.writePhoneNumber(recipient);
     transport.sendMessage(msg.getMessage());
 }
 

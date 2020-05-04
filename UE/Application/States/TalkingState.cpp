@@ -1,14 +1,13 @@
 #include "TalkingState.hpp"
 
+
 namespace ue
 {
 
-TalkingState::TalkingState(Context &context,common::PhoneNumber number)
-    : BaseState(context, "TalkingState")
+TalkingState::TalkingState(Context& context, common::PhoneNumber recipient)
+    :BaseState(context, "Talking State"),
+      recipient(recipient)
 {
-    recipientNumber = number;
-//    context.user.showConnected();
-//    context.timer.stopTimer();
 }
 
 void TalkingState::handleUnknownRecipientAfterCallAccepted(){

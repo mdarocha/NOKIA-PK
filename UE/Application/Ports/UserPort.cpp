@@ -37,6 +37,9 @@ void UserPort::handleAcceptClicked()
             if(currentItem.first && currentItem.second == UserPort::NewSmsItem) {
                 setCurrentMode(CurrentView::NewSms, &gui.setSmsComposeMode());
             }
+            else if(currentItem.first && currentItem.second == UserPort::NewCallItem){
+                setCurrentMode(CurrentView::NewCall, &gui.setDialMode());
+            }
             break;
         }
         case CurrentView::NewSms: {
@@ -53,6 +56,22 @@ void UserPort::handleAcceptClicked()
         {
             handler->handleSendCallAccept(recipientPhoneNumber);
             setCurrentMode(CurrentView::Call, &gui.setCallMode());
+            break;
+        }
+	case CurrentView::NewCall:{
+            logger.logDebug("log debug: handleAcceptClicked()");
+            auto mode = (IUeGui::IDialMode*)current.second;
+            recipientPhoneNumber = mode->getPhoneNumber();
+
+            setCurrentMode(CurrentView::Call, &gui.setCallMode());
+            handler->handleSendCallRequest(recipientPhoneNumber);
+
+            auto newMode = (IUeGui::ICallMode*) currentMode;
+            newMode->appendIncomingText("Calling to "+to_string(recipientPhoneNumber));
+            break;
+        }
+        case CurrentView::Call:{
+            //to be implemented
             break;
         }
         default: {
@@ -74,6 +93,19 @@ void UserPort::handleRejectClicked()
         case CurrentView::IncomingCall:
         {
             handler->handleSendCallDropped(recipientPhoneNumber);
+            break;
+        }
+	case CurrentView::NewCall:{
+            logger.logDebug("Back to main menu");
+            showConnected();
+            break;
+        }
+        case CurrentView::Call:{
+            logger.logDebug("Call resignation");
+            handler->handleSendCallDrop(recipientPhoneNumber);
+            auto menu = (IUeGui::ICallMode*)current.second;
+            menu->appendIncomingText("Call resignation "+to_string(recipientPhoneNumber));
+            showConnected();
             break;
         }
         default: {
@@ -105,6 +137,7 @@ void UserPort::showConnected()
     menu->clearSelectionList();
     menu->addSelectionListItem("Compose SMS", "Create new SMS");
     menu->addSelectionListItem("View SMS", "List all your messages");
+    menu->addSelectionListItem("Make call", "Make new call");
 
     setCurrentMode(CurrentView::HomeMenu, menu);
 }
@@ -126,6 +159,38 @@ void UserPort::showPeerUserDisconnected()
 {
     auto info = (IUeGui::ICallMode*) currentMode;
     info->appendIncomingText("Unknown recipient");
+}
+
+void UserPort::showNotAvailable(common::PhoneNumber recipient)
+{
+    gui.showPeerUserNotAvailable(recipient);
+}
+
+void UserPort::showPeerNotConnected(common::PhoneNumber recipient)
+{
+    auto mode = (IUeGui::ICallMode *)currentMode;
+    mode->appendIncomingText("Peer "+to_string(recipient)+" is not available");
+    showConnected();
+}
+
+void UserPort::showPeerConnected(common::PhoneNumber recipient)
+{
+    auto mode = (IUeGui::ICallMode *)currentMode;
+    mode->appendIncomingText("Connected to "+to_string(recipient));
+    mode->appendIncomingText("Now you can talk");
+}
+
+void UserPort::showCallDropped(common::PhoneNumber recipient)
+{
+    auto mode = (IUeGui::ICallMode *)currentMode;
+    mode->appendIncomingText("Peer drop call");
+    showConnected();
+}
+
+void UserPort::callTimeout()
+{
+    handler->handleSendCallDrop(recipientPhoneNumber);
+    showConnected();
 }
 
 }

@@ -8,9 +8,10 @@ namespace ue
 class TalkingState : public BaseState
 {
 public:
-    TalkingState(Context& context, common::PhoneNumber number);
+    TalkingState(Context& context, common::PhoneNumber recipient);
     void handleUnknownRecipientAfterCallAccepted() final;
-    common::PhoneNumber recipientNumber;
+private:    
+	common::PhoneNumber recipient;
 };
 
 }
