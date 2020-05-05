@@ -58,12 +58,12 @@ void UserPort::handleAcceptClicked()
             setCurrentMode(CurrentView::Call, &gui.setCallMode());
             break;
         }
-	case CurrentView::NewCall:{
+        case CurrentView::NewCall:{
             logger.logDebug("log debug: handleAcceptClicked()");
             auto mode = (IUeGui::IDialMode*)current.second;
             recipientPhoneNumber = mode->getPhoneNumber();
 
-            setCurrentMode(CurrentView::Call, &gui.setCallMode());
+            setCurrentMode(CurrentView::OutgoingCall, &gui.setCallMode());
             handler->handleSendCallRequest(recipientPhoneNumber);
 
             auto newMode = (IUeGui::ICallMode*) currentMode;
@@ -95,12 +95,12 @@ void UserPort::handleRejectClicked()
             handler->handleSendCallDropped(recipientPhoneNumber);
             break;
         }
-	case CurrentView::NewCall:{
+        case CurrentView::NewCall:{
             logger.logDebug("Back to main menu");
             showConnected();
             break;
         }
-        case CurrentView::Call:{
+        case CurrentView::OutgoingCall:{
             logger.logDebug("Call resignation");
             handler->handleSendCallDrop(recipientPhoneNumber);
             auto menu = (IUeGui::ICallMode*)current.second;
@@ -178,6 +178,7 @@ void UserPort::showPeerConnected(common::PhoneNumber recipient)
     auto mode = (IUeGui::ICallMode *)currentMode;
     mode->appendIncomingText("Connected to "+to_string(recipient));
     mode->appendIncomingText("Now you can talk");
+    setCurrentMode(CurrentView::Call, mode);
 }
 
 void UserPort::showCallDropped(common::PhoneNumber recipient)

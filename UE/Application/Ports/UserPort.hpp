@@ -18,6 +18,7 @@ enum class CurrentView {
     NewSms,
     SmsList,
     IncomingCall,
+    OutgoingCall,
     NewCall,
     Call
 };
