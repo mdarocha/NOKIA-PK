@@ -250,6 +250,19 @@ TEST_F(MultiLineConfigTestSuite, shallInsertNotPresentKeysFromOtherConfig)
     ASSERT_EQ("Overwritten value", value3);
 }
 
+TEST_F(MultiLineConfigTestSuite, shallNotThrowExceptionWhileParsingEOF)
+{
+    std::string input = "key1 = value1\n";
+    input += std::char_traits<char>::eof();
+
+    makeObjectUnderTest(input);
+
+    std::string value1;
+    ASSERT_NO_THROW(value1 = objectUnderTest->getString("key1"));
+
+    ASSERT_EQ("value1", value1);
+}
+
 
 
 } // namespace common
