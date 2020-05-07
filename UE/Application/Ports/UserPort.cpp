@@ -54,6 +54,8 @@ void UserPort::handleAcceptClicked()
         }
         case CurrentView::IncomingCall:
         {
+            auto mode = (IUeGui::ICallMode *)currentMode;
+            mode->appendIncomingText("Now you can talk");
             handler->handleSendCallAccept(recipientPhoneNumber);
             setCurrentMode(CurrentView::Call, &gui.setCallMode());
             break;
@@ -92,6 +94,8 @@ void UserPort::handleRejectClicked()
         }
         case CurrentView::IncomingCall:
         {
+            auto mode = (IUeGui::ICallMode *)currentMode;
+            mode->appendIncomingText("Peer drop call");
             handler->handleSendCallDropped(recipientPhoneNumber);
             break;
         }
@@ -152,7 +156,7 @@ void UserPort::showCallRequest(common::PhoneNumber recipient)
     recipientPhoneNumber = recipient;
     setCurrentMode(CurrentView::IncomingCall, &gui.setCallMode());
     auto info = (IUeGui::ICallMode*) currentMode;
-    info->appendIncomingText("From " + to_string(recipient));
+    info->appendIncomingText("Incomig from " + to_string(recipient));
 }
 
 void UserPort::showPeerUserDisconnected()
