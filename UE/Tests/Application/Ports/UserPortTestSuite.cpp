@@ -315,6 +315,8 @@ TEST_F(UserPortTestSuite, shallShowCallDropped)
 {
     common::PhoneNumber recipent{123};
 
+    EXPECT_CALL(callModeMock, appendIncomingText(_)).Times(AtLeast(1));
+
     EXPECT_CALL(guiMock, setListViewMode()).WillOnce(ReturnRef(listViewModeMock));
     EXPECT_CALL(listViewModeMock, clearSelectionList());
     EXPECT_CALL(listViewModeMock, addSelectionListItem(_, _)).Times(AtLeast(1));
