@@ -102,15 +102,111 @@ TEST_F(ApplicationConnectedTestSuite, shallSendSms)
     objectUnderTest.handleSendSms(recipent, message);
 }
 
-TEST_F(ApplicationConnectedTestSuite, challHandleReceivedSms)
+TEST_F(ApplicationConnectedTestSuite, shallHandleReceivedSms)
 {
     auto sender = common::PhoneNumber{124};
     auto message = "witaj";
-    
+
     EXPECT_CALL(userPortMock, showNewSms());
     EXPECT_CALL(dbPortMock, saveReceivedSms(sender, message));
 
     objectUnderTest.handleReceivedSms(sender, message);
+}
+
+TEST_F(ApplicationConnectedTestSuite, shallSendCallRequest)
+{
+    common::PhoneNumber recipent{123};
+
+    EXPECT_CALL(btsPortMock, sendCallRequest(recipent));
+    EXPECT_CALL(timerPortMock, startTimer(_));
+
+    objectUnderTest.handleSendCallRequest(recipent);
+}
+
+TEST_F(ApplicationConnectedTestSuite, shallHandleReceivedCallRequest)
+{
+    common::PhoneNumber recipent{123};
+
+    EXPECT_CALL(timerPortMock, startTimer(_));
+    EXPECT_CALL(userPortMock, showCallRequest(recipent));
+
+    objectUnderTest.handleReceivedCallRequest(recipent);
+}
+
+
+TEST_F(ApplicationConnectedTestSuite, shallSendCallDropped)
+{
+    common::PhoneNumber recipent{123};
+
+    EXPECT_CALL(userPortMock, showConnected());
+    EXPECT_CALL(btsPortMock, sendCallDropped(recipent));
+
+    objectUnderTest.handleSendCallDropped(recipent);
+}
+
+TEST_F(ApplicationConnectedTestSuite, shallHandleReceivedCallAccept)
+{
+    common::PhoneNumber recipent{123};
+
+    EXPECT_CALL(timerPortMock, stopTimer());
+    EXPECT_CALL(userPortMock, showPeerConnected(recipent));
+
+    objectUnderTest.handleReceivedCallAccepted(recipent);
+}
+
+TEST_F(ApplicationConnectedTestSuite, shallHandleReceivedCallDropped)
+{
+    common::PhoneNumber recipent{123};
+
+    EXPECT_CALL(timerPortMock, stopTimer());
+    EXPECT_CALL(userPortMock, showCallDropped(recipent));
+
+    objectUnderTest.handleReceivedCallDropped(recipent);
+}
+
+TEST_F(ApplicationConnectedTestSuite, shallSendCallDrop)
+{
+    common::PhoneNumber recipent{123};
+
+    EXPECT_CALL(userPortMock, showConnected());
+    EXPECT_CALL(btsPortMock, sendCallDropped(recipent));
+
+    objectUnderTest.handleSendCallDropped(recipent);
+}
+
+TEST_F(ApplicationConnectedTestSuite, shallHandlePeerNotConnected)
+{
+    common::PhoneNumber recipent{123};
+
+    EXPECT_CALL(timerPortMock, stopTimer());
+    EXPECT_CALL(userPortMock, showPeerNotConnected(recipent));
+
+    objectUnderTest.handlePeerNotConnected(recipent);
+}
+
+TEST_F(ApplicationConnectedTestSuite, shallHandleTimeout)
+{
+    EXPECT_CALL(userPortMock, callTimeout());
+    objectUnderTest.handleTimeout();
+}
+
+struct ApplicationTalkingTestSuite : ApplicationConnectedTestSuite {
+    ApplicationTalkingTestSuite() {
+        common::PhoneNumber recipent{123};
+        EXPECT_CALL(btsPortMock, sendCallAccept(recipent));
+        objectUnderTest.handleSendCallAccept(recipent);
+    }
+};
+
+TEST_F(ApplicationTalkingTestSuite, shallSendCallAccept)
+{
+    //constructor
+}
+
+TEST_F(ApplicationTalkingTestSuite, shallHandleUnknownRecipentAfterAccepted)
+{
+    EXPECT_CALL(userPortMock, showPeerUserDisconnected());
+    objectUnderTest.handleUnknownRecipientAfterCallAccepted();
 }
 
 }
