@@ -56,20 +56,20 @@ void UserPort::handleAcceptClicked()
         {
             auto mode = (IUeGui::ICallMode *)currentMode;
             mode->appendIncomingText("Now you can talk");
-            handler->handleSendCallAccept(recipientPhoneNumber);
+            handler->handleSendCallAccept(getCurrentRecipent());
             setCurrentMode(CurrentView::Call, &gui.setCallMode());
             break;
         }
         case CurrentView::NewCall:{
             logger.logDebug("log debug: handleAcceptClicked()");
             auto mode = (IUeGui::IDialMode*)current.second;
-            recipientPhoneNumber = mode->getPhoneNumber();
+            setCurrentRecipent(mode->getPhoneNumber());
 
             setCurrentMode(CurrentView::OutgoingCall, &gui.setCallMode());
-            handler->handleSendCallRequest(recipientPhoneNumber);
+            handler->handleSendCallRequest(getCurrentRecipent());
 
             auto newMode = (IUeGui::ICallMode*) currentMode;
-            newMode->appendIncomingText("Calling to "+to_string(recipientPhoneNumber));
+            newMode->appendIncomingText("Calling to "+to_string(getCurrentRecipent()));
             break;
         }
         case CurrentView::Call:{
@@ -96,7 +96,7 @@ void UserPort::handleRejectClicked()
         {
             auto mode = (IUeGui::ICallMode *)currentMode;
             mode->appendIncomingText("Peer drop call");
-            handler->handleSendCallDropped(recipientPhoneNumber);
+            handler->handleSendCallDropped(getCurrentRecipent());
             break;
         }
         case CurrentView::NewCall:{
@@ -106,9 +106,9 @@ void UserPort::handleRejectClicked()
         }
         case CurrentView::OutgoingCall:{
             logger.logDebug("Call resignation");
-            handler->handleSendCallDrop(recipientPhoneNumber);
+            handler->handleSendCallDrop(getCurrentRecipent());
             auto menu = (IUeGui::ICallMode*)current.second;
-            menu->appendIncomingText("Call resignation "+to_string(recipientPhoneNumber));
+            menu->appendIncomingText("Call resignation "+to_string(getCurrentRecipent()));
             showConnected();
             break;
         }
@@ -153,7 +153,7 @@ void UserPort::showNewSms()
 
 void UserPort::showCallRequest(common::PhoneNumber recipient)
 {
-    recipientPhoneNumber = recipient;
+    setCurrentRecipent(recipient);
     setCurrentMode(CurrentView::IncomingCall, &gui.setCallMode());
     auto info = (IUeGui::ICallMode*) currentMode;
     info->appendIncomingText("Incomig from " + to_string(recipient));
@@ -196,6 +196,16 @@ void UserPort::callTimeout()
 {
     handler->handleSendCallDrop(recipientPhoneNumber);
     showConnected();
+}
+
+void UserPort::setCurrentRecipent(common::PhoneNumber recipient)
+{
+    recipientPhoneNumber = recipient;
+}
+
+common::PhoneNumber UserPort::getCurrentRecipent()
+{
+    return recipientPhoneNumber;
 }
 
 }

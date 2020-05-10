@@ -49,6 +49,8 @@ public:
     std::pair<CurrentView, IUeGui::BaseMode*> getCurrentMode() { return std::pair(currentView, currentMode); };
     void setCurrentMode(CurrentView curView, IUeGui::BaseMode* mode) { currentView = curView; currentMode = mode; };
 
+    void setCurrentRecipent(common::PhoneNumber recipent);
+    common::PhoneNumber getCurrentRecipent();
 private:
     void handleAcceptClicked();
     void handleRejectClicked();
