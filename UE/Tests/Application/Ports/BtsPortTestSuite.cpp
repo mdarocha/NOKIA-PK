@@ -117,36 +117,38 @@ TEST_F(BtsPortTestSuite, shallSendSms)
 
 TEST_F(BtsPortTestSuite, shallHandleReceivedSms)
 {
-    EXPECT_CALL(handlerMock, handleReceivedSms);
+    EXPECT_CALL(handlerMock, handleReceivedSms(common::PhoneNumber{123}, "test"));
+
     common::OutgoingMessage msg{common::MessageId::Sms,
-                                common::PhoneNumber{},
+                                common::PhoneNumber{123},
                                 PHONE_NUMBER};
+    msg.writeText("test");
     messageCallback(msg.getMessage());
 }
 
 TEST_F(BtsPortTestSuite, shallHandleReceivedCallRequest)
 {
-    EXPECT_CALL(handlerMock, handleReceivedCallRequest);
+    EXPECT_CALL(handlerMock, handleReceivedCallRequest(common::PhoneNumber{123}));
     common::OutgoingMessage msg{common::MessageId::CallRequest,
-                                common::PhoneNumber{},
+                                common::PhoneNumber{123},
                                 PHONE_NUMBER};
     messageCallback(msg.getMessage());
 }
 
 TEST_F(BtsPortTestSuite, shallHandleReceivedCallAccepted)
 {
-    EXPECT_CALL(handlerMock, handleReceivedCallAccepted);
+    EXPECT_CALL(handlerMock, handleReceivedCallAccepted(common::PhoneNumber{123}));
     common::OutgoingMessage msg{common::MessageId::CallAccepted,
-                               common::PhoneNumber{},
+                               common::PhoneNumber{123},
                                PHONE_NUMBER};
     messageCallback(msg.getMessage());
 }
 
 TEST_F(BtsPortTestSuite, shallHandleReceivedCallDropped)
 {
-    EXPECT_CALL(handlerMock, handleReceivedCallDropped);
+    EXPECT_CALL(handlerMock, handleReceivedCallDropped(common::PhoneNumber{123}));
     common::OutgoingMessage msg{common::MessageId::CallDropped,
-                                common::PhoneNumber{},
+                                common::PhoneNumber{123},
                                 PHONE_NUMBER};
     messageCallback(msg.getMessage());
 }
@@ -203,6 +205,36 @@ TEST_F(BtsPortTestSuite, shallHandleDisconnect)
 {
     EXPECT_CALL(handlerMock, handleDisconnect());
     disconnectCallback();
+}
+
+TEST_F(BtsPortTestSuite, shallHandleUnknownRecipientToCallRequest)
+{
+    auto failTo = common::PhoneNumber{124};
+
+    EXPECT_CALL(handlerMock, handlePeerNotConnected(failTo));
+
+    common::OutgoingMessage msg{common::MessageId::UnknownRecipient,
+                                common::PhoneNumber{},
+                                PHONE_NUMBER};
+    msg.writeMessageId(common::MessageId::CallRequest);
+    msg.writePhoneNumber(PHONE_NUMBER);
+    msg.writePhoneNumber(failTo);
+
+    messageCallback(msg.getMessage());
+}
+
+TEST_F(BtsPortTestSuite, shallHandleUnknownRecipientToCallAccept)
+{
+    EXPECT_CALL(handlerMock, handleUnknownRecipientAfterCallAccepted());
+
+    common::OutgoingMessage msg{common::MessageId::UnknownRecipient,
+                                common::PhoneNumber{},
+                                PHONE_NUMBER};
+    msg.writeMessageId(common::MessageId::CallAccepted);
+    msg.writePhoneNumber(PHONE_NUMBER);
+    msg.writePhoneNumber(common::PhoneNumber{});
+
+    messageCallback(msg.getMessage());
 }
 
 }
