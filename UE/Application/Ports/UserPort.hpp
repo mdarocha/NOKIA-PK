@@ -6,6 +6,7 @@
 #include "UeGui/ISmsComposeMode.hpp"
 #include "UeGui/IListViewMode.hpp"
 #include "Messages/PhoneNumber.hpp"
+#include "IDbPort.hpp"
 
 namespace ue
 {
@@ -14,20 +15,23 @@ enum class CurrentView {
     Status,
     HomeMenu,
     NewSms,
-    SmsList
+    SmsList,
+    TextView
 };
 
 class UserPort : public IUserPort
 {
 public:
     UserPort(common::ILogger& logger, IUeGui& gui, common::PhoneNumber phoneNumber);
-    void start(IUserEventsHandler& handler);
+    void start(IUserEventsHandler& handler, IDbPort& dbPort);
     void stop();
 
     void showNotConnected() override;
     void showConnecting() override;
     void showConnected() override;
     void showNewSms() override;
+    void showSmsList() override;
+    void showSms(int id) override;
 
     constexpr static unsigned NewSmsItem = 0;
     constexpr static unsigned ListSmsItem = 1;
@@ -48,6 +52,7 @@ private:
 
     common::PhoneNumber phoneNumber;
     IUserEventsHandler* handler = nullptr;
+    IDbPort* dbPort = nullptr;
 };
 
 }

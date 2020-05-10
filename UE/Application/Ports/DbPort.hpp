@@ -8,7 +8,8 @@
 namespace ue
 {
 
-inline auto initStorage(const std::string& path) {
+inline auto initStorage(const std::string& path) 
+{
     using namespace sqlite_orm;
     return make_storage(path,
             make_table("Messages",
@@ -16,8 +17,12 @@ inline auto initStorage(const std::string& path) {
                     primary_key(), autoincrement()),
                 make_column("Text", &DbMessage::text),
                 make_column("FromNumber", &DbMessage::fromNumber),
-                make_column("ToNumber", &DbMessage::toNumber)));
+                make_column("ToNumber", &DbMessage::toNumber),
+                make_column("Status", &DbMessage::status)
+                )
+            );
 }
+
 using Storage = decltype(initStorage(""));
 
 class DbPort : public IDbPort
@@ -29,6 +34,8 @@ class DbPort : public IDbPort
 
         int saveSentSms(const common::PhoneNumber& to, const std::string& message) override;
         int saveReceivedSms(const common::PhoneNumber& from, const std::string& message) override;
+        std::vector<DbMessage> getAllMessages() override;
+        DbMessage getMessage(int id) override;
     private:
         common::PhoneNumber phoneNumber;
         std::string databasePath;

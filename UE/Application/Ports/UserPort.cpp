@@ -1,5 +1,7 @@
 #include "UserPort.hpp"
 #include "UeGui/IListViewMode.hpp"
+#include "UeGui/ITextMode.hpp"
+#include <sstream>
 
 namespace ue
 {
@@ -12,10 +14,11 @@ UserPort::UserPort(common::ILogger &logger, IUeGui &gui, common::PhoneNumber pho
       currentMode(nullptr)
 {}
 
-void UserPort::start(IUserEventsHandler &handler)
+void UserPort::start(IUserEventsHandler &handler, IDbPort& dbPort)
 {
     this->handler = &handler;
-    gui.setTitle("Nokia " + to_string(phoneNumber));
+    this->dbPort = &dbPort;
+    gui.setTitle("Nokia 3310: " + to_string(phoneNumber));
     gui.setAcceptCallback([this]() { handleAcceptClicked(); });
     gui.setRejectCallback([this]() { handleRejectClicked(); });
 }
@@ -23,6 +26,7 @@ void UserPort::start(IUserEventsHandler &handler)
 void UserPort::stop()
 {
     handler = nullptr;
+    dbPort = nullptr;
     gui.setAcceptCallback(nullptr);
     gui.setRejectCallback(nullptr);
 }
@@ -31,14 +35,21 @@ void UserPort::handleAcceptClicked()
 {
     auto current = getCurrentMode();
     switch(current.first) {
-        case CurrentView::HomeMenu: {
+        case CurrentView::HomeMenu: 
+        {
             auto currentItem = ((IUeGui::IListViewMode*)current.second)->getCurrentItemIndex();
-            if(currentItem.first && currentItem.second == UserPort::NewSmsItem) {
+            if(currentItem.first && currentItem.second == UserPort::NewSmsItem) 
+            {
                 setCurrentMode(CurrentView::NewSms, &gui.setSmsComposeMode());
+            }
+            if(currentItem.first && currentItem.second == UserPort::ListSmsItem)
+            {
+                showSmsList();
             }
             break;
         }
-        case CurrentView::NewSms: {
+        case CurrentView::NewSms: 
+        {
             auto menu = (IUeGui::ISmsComposeMode*)current.second;
             auto recipent = menu->getPhoneNumber();
             auto text = menu->getSmsText();
@@ -46,6 +57,15 @@ void UserPort::handleAcceptClicked()
 
             menu->clearSmsText();
             showConnected();
+            break;
+        }
+        case CurrentView::SmsList:
+        {
+            auto currentItem = ((IUeGui::IListViewMode*)current.second)->getCurrentItemIndex();
+            if(currentItem.first)
+            {
+                showSms(currentItem.second + 1);
+            }
             break;
         }
         default: {
@@ -58,12 +78,25 @@ void UserPort::handleRejectClicked()
 {
     auto current = getCurrentMode();
     switch(current.first) {
-        case CurrentView::NewSms: {
+        case CurrentView::NewSms: 
+        {
             auto menu = (IUeGui::ISmsComposeMode*)current.second;
             menu->clearSmsText();
             showConnected();
+            break;
         }
-        default: {
+        case CurrentView::SmsList:
+        {
+            showConnected();
+            break;
+        }
+        case CurrentView::TextView:
+        {
+            showSmsList();
+            break;
+        }
+        default: 
+        {
             break;
         }
     }
@@ -99,6 +132,52 @@ void UserPort::showConnected()
 void UserPort::showNewSms()
 {
     gui.showNewSms();
+}
+
+void UserPort::showSmsList()
+{
+    auto messages = dbPort->getAllMessages();
+    auto menu = (IUeGui::IListViewMode*) &gui.setListViewMode();
+    menu->clearSelectionList();
+    if(messages.empty())
+    {
+        menu->addSelectionListItem("No messages to view :)", "No messages");
+    }
+    else
+    {
+        for(auto& m : messages)
+        {
+            if(m.fromNumber == phoneNumber.value)
+            {
+                menu->addSelectionListItem("To: " + std::to_string(m.toNumber), m.text);
+            }
+            else
+            {
+                menu->addSelectionListItem("From: " + std::to_string(m.fromNumber), m.text);
+            }
+        }
+    }
+    setCurrentMode(CurrentView::SmsList, menu);
+}
+
+void UserPort::showSms(int id)
+{
+    auto menu = (IUeGui::ITextMode*) &gui.setViewTextMode();
+    DbMessage message = dbPort->getMessage(id);
+    std::ostringstream messageString;
+
+    if(message.fromNumber == phoneNumber.value)
+    {
+        messageString << "To: " << message.toNumber;
+    }
+    else
+    {
+        messageString << "From: " << message.fromNumber;
+    }
+    messageString << std::endl << "---------" << std::endl;
+    messageString << message.text << std::endl;
+    menu->setText(messageString.str());
+    setCurrentMode(CurrentView::TextView, menu);
 }
 
 }
