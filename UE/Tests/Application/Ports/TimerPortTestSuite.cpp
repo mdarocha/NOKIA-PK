@@ -1,3 +1,5 @@
+#include<thread>
+
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
@@ -17,7 +19,6 @@ protected:
     NiceMock<common::ILoggerMock> loggerMock;
     StrictMock<ITimerEventsHandlerMock> handlerMock;
 
-
     TimerPort objectUnderTest{loggerMock};
 
     TimerPortTestSuite()
@@ -30,8 +31,11 @@ protected:
     }
 };
 
-TEST_F(TimerPortTestSuite, shallStart)
+TEST_F(TimerPortTestSuite, shallHandleTimeout)
 {
+    EXPECT_CALL(handlerMock, handleTimeout());
+    objectUnderTest.startTimer(std::chrono::duration<int>(1));
+    std::this_thread::sleep_for(std::chrono::duration<int>(2));
 }
 
 }
