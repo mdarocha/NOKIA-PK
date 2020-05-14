@@ -21,11 +21,20 @@ public:
     void handleAttachAccept() override;
     void handleAttachReject() override;
     void handleReceivedSms(common::PhoneNumber sender, std::string message) override;
+    void handleReceivedCallRequest(common::PhoneNumber recipient) override;
+    void handleReceivedCallAccepted(common::PhoneNumber) override;
+    void handleReceivedCallDropped(common::PhoneNumber) override;
     void handleDisconnect() override;
+    void handleSendCallDrop(common::PhoneNumber) override;
+    void handlePeerNotConnected(common::PhoneNumber) override;
+    void handleUnknownRecipientAfterCallAccepted() override;
 
 
     //IUserEventsHandler interface
     void handleSendSms(common::PhoneNumber recipent, std::string message) override;
+    void handleSendCallAccept(common::PhoneNumber recipient) override;
+    void handleSendCallDropped(common::PhoneNumber recipient) override;
+    void handleSendCallRequest(common::PhoneNumber) override;
 protected:
     Context& context;
 

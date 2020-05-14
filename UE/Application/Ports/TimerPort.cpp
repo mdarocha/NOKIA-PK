@@ -1,4 +1,5 @@
 #include "TimerPort.hpp"
+#include <thread>
 
 namespace ue
 {
@@ -17,16 +18,33 @@ void TimerPort::stop()
 {
     logger.logDebug("Stoped");
     handler = nullptr;
+    clearTimer = true;
 }
 
 void TimerPort::startTimer(Duration duration)
 {
     logger.logDebug("Start timer: ", duration.count(), "ms");
+    setTimeout(duration);
 }
 
 void TimerPort::stopTimer()
 {
     logger.logDebug("Stop timer");
+    clearTimer = true;
+}
+
+void TimerPort::setTimeout(Duration duration)
+{
+    clearTimer = false;
+    std::thread t{[=](){
+            if(clearTimer)
+                return;
+            std::this_thread::sleep_for(duration);
+            if(clearTimer)
+                return;
+            handler->handleTimeout();
+    }};
+    t.detach();
 }
 
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <chrono>
+#include <Messages/PhoneNumber.hpp>
 
 namespace ue
 {
