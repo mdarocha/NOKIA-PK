@@ -96,4 +96,14 @@ void BaseState::handlePeerNotConnected(common::PhoneNumber recipient)
     logger.logError("Unexpected: handleUnknownRecipient after CallRequest");
 }
 
+void BaseState::handleSendCallTalk(std::string)
+{
+    logger.logError("Unexpected: handleSendCallTalk");
+}
+
+void BaseState::handleReceivedCallTalk(common::PhoneNumber, std::string)
+{
+    logger.logError("Unexpected: handleReceivedCallTalk");
+}
+
 }

@@ -44,6 +44,7 @@ public:
     void showPeerNotConnected(common::PhoneNumber) override;
     void showPeerConnected(common::PhoneNumber) override;
     void showCallDropped(common::PhoneNumber) override;
+    void showNewCallTalk(common::PhoneNumber, std::string) override;
     void callTimeout() override;
 
     constexpr static unsigned NewSmsItem = 0;

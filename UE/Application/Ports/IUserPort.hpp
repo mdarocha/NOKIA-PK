@@ -14,6 +14,7 @@ public:
     virtual void handleSendCallDropped(common::PhoneNumber recipient) = 0;
     virtual void handleSendCallRequest(common::PhoneNumber recipient) = 0;
     virtual void handleSendCallDrop(common::PhoneNumber) = 0;
+    virtual void handleSendCallTalk(std::string) = 0;
 };
 
 class IUserPort
@@ -33,6 +34,7 @@ public:
     virtual void showPeerNotConnected(common::PhoneNumber) = 0;
     virtual void showPeerConnected(common::PhoneNumber) = 0;
     virtual void showCallDropped(common::PhoneNumber) = 0;
+    virtual void showNewCallTalk(common::PhoneNumber, std::string) = 0;
     virtual void callTimeout() = 0;
 };
 
