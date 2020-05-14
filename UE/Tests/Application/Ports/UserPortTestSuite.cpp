@@ -182,17 +182,9 @@ TEST_F(UserPortTestSuite, shallRejectIncomingCall)
     EXPECT_CALL(handlerMock, handleSendCallDropped(recipent));
     EXPECT_CALL(callModeMock, appendIncomingText(_)).Times(AtLeast(1));
 
-    EXPECT_CALL(guiMock, setListViewMode()).WillOnce(ReturnRef(listViewModeMock));
-    EXPECT_CALL(listViewModeMock, clearSelectionList());
-    EXPECT_CALL(listViewModeMock, addSelectionListItem(_, _)).Times(AtLeast(1));
-
     objectUnderTest.setCurrentRecipent(recipent);
     objectUnderTest.setCurrentMode(CurrentView::IncomingCall, &callModeMock);
     rejectCallback();
-
-    auto currentMode = objectUnderTest.getCurrentMode();
-    EXPECT_EQ(currentMode.first, CurrentView::HomeMenu);
-    EXPECT_EQ(currentMode.second, &listViewModeMock);
 }
 
 TEST_F(UserPortTestSuite, shallReturnToMenuFromCall)
