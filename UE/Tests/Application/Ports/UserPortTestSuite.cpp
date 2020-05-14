@@ -21,6 +21,8 @@ protected:
     StrictMock<IUeGuiMock> guiMock;
     StrictMock<IListViewModeMock> listViewModeMock;
     StrictMock<ISmsComposeModeMock> smsComposeModeMock;
+    StrictMock<IDialModeMock> dialModeMock;
+    StrictMock<ICallModeMock> callModeMock;
     StrictMock<IDbPortMock> dbPortMock;
     StrictMock<ITextModeMock> textModeMock;
 
@@ -125,6 +127,19 @@ TEST_F(UserPortTestSuite, shallShowSmsDetail)
     EXPECT_EQ(currentMode.second, &textModeMock);
 }
 
+TEST_F(UserPortTestSuite, shallShowDialOnItemClick)
+{
+    EXPECT_CALL(listViewModeMock, getCurrentItemIndex()).WillOnce(Return(std::pair<bool, unsigned>(true, UserPort::NewCallItem)));
+    EXPECT_CALL(guiMock, setDialMode()).WillOnce(ReturnRef(dialModeMock));
+
+    objectUnderTest.setCurrentMode(CurrentView::HomeMenu, &listViewModeMock);
+    acceptCallback();
+
+    auto currentMode = objectUnderTest.getCurrentMode();
+    EXPECT_EQ(currentMode.first, CurrentView::NewCall);
+    EXPECT_EQ(currentMode.second, &dialModeMock);
+}
+
 TEST_F(UserPortTestSuite, shallSendSmsEventOnSmsSend)
 {
     EXPECT_CALL(guiMock, setListViewMode()).WillOnce(ReturnRef(listViewModeMock));
@@ -190,10 +205,189 @@ TEST_F(UserPortTestSuite, shallExitSmsDetailView)
     EXPECT_EQ(currentMode.second, &listViewModeMock);
 }
 
-TEST_F(UserPortTestSuite, shallShowSmsReceivedIcon)
+TEST_F(UserPortTestSuite, shallShowSMSReceivedIconOnSMSReceive)
 {
     EXPECT_CALL(guiMock, showNewSms());
     objectUnderTest.showNewSms();
+}
+
+TEST_F(UserPortTestSuite, shallAcceptIncomingCall)
+{
+    common::PhoneNumber recipent{123};
+
+    EXPECT_CALL(handlerMock, handleSendCallAccept(recipent));
+    EXPECT_CALL(callModeMock, appendIncomingText(_)).Times(AtLeast(1));
+    EXPECT_CALL(guiMock, setCallMode()).WillOnce(ReturnRef(callModeMock));
+
+    objectUnderTest.setCurrentRecipent(recipent);
+    objectUnderTest.setCurrentMode(CurrentView::IncomingCall, &callModeMock);
+    acceptCallback();
+}
+
+TEST_F(UserPortTestSuite, shallMakeCallRequest)
+{
+    common::PhoneNumber recipent{123};
+
+    EXPECT_CALL(dialModeMock, getPhoneNumber()).WillOnce(Return(recipent));
+    EXPECT_CALL(handlerMock, handleSendCallRequest(recipent));
+    EXPECT_CALL(guiMock, setCallMode()).WillOnce(ReturnRef(callModeMock));
+    EXPECT_CALL(callModeMock, appendIncomingText(_)).Times(AtLeast(1));
+
+    objectUnderTest.setCurrentMode(CurrentView::NewCall, &dialModeMock);
+    acceptCallback();
+
+    auto currentMode = objectUnderTest.getCurrentMode();
+    auto currentRecipent = objectUnderTest.getCurrentRecipent();
+
+    EXPECT_EQ(currentRecipent, recipent);
+    EXPECT_EQ(currentMode.first, CurrentView::OutgoingCall);
+    EXPECT_EQ(currentMode.second, &callModeMock);
+}
+
+TEST_F(UserPortTestSuite, shallRejectIncomingCall)
+{
+    common::PhoneNumber recipent{123};
+
+    EXPECT_CALL(handlerMock, handleSendCallDropped(recipent));
+    EXPECT_CALL(callModeMock, appendIncomingText(_)).Times(AtLeast(1));
+
+    objectUnderTest.setCurrentRecipent(recipent);
+    objectUnderTest.setCurrentMode(CurrentView::IncomingCall, &callModeMock);
+    rejectCallback();
+}
+
+TEST_F(UserPortTestSuite, shallReturnToMenuFromCall)
+{
+    EXPECT_CALL(guiMock, setListViewMode()).WillOnce(ReturnRef(listViewModeMock));
+    EXPECT_CALL(listViewModeMock, clearSelectionList());
+    EXPECT_CALL(listViewModeMock, addSelectionListItem(_, _)).Times(AtLeast(1));
+
+    objectUnderTest.setCurrentMode(CurrentView::NewCall, &dialModeMock);
+    rejectCallback();
+
+    auto currentMode = objectUnderTest.getCurrentMode();
+    EXPECT_EQ(currentMode.first, CurrentView::HomeMenu);
+    EXPECT_EQ(currentMode.second, &listViewModeMock);
+}
+
+TEST_F(UserPortTestSuite, shallRejectOutgoingCall)
+{
+    common::PhoneNumber recipent{123};
+
+    EXPECT_CALL(handlerMock, handleSendCallDrop(recipent));
+    EXPECT_CALL(callModeMock, appendIncomingText(_)).Times(AtLeast(1));
+
+    EXPECT_CALL(guiMock, setListViewMode()).WillOnce(ReturnRef(listViewModeMock));
+    EXPECT_CALL(listViewModeMock, clearSelectionList());
+    EXPECT_CALL(listViewModeMock, addSelectionListItem(_, _)).Times(AtLeast(1));
+
+    objectUnderTest.setCurrentRecipent(recipent);
+    objectUnderTest.setCurrentMode(CurrentView::OutgoingCall, &callModeMock);
+    rejectCallback();
+
+    auto currentMode = objectUnderTest.getCurrentMode();
+    EXPECT_EQ(currentMode.first, CurrentView::HomeMenu);
+    EXPECT_EQ(currentMode.second, &listViewModeMock);
+}
+
+TEST_F(UserPortTestSuite, shallHandleCallTimeout)
+{
+    common::PhoneNumber recipent{123};
+
+    EXPECT_CALL(handlerMock, handleSendCallDrop(recipent));
+
+    EXPECT_CALL(guiMock, setListViewMode()).WillOnce(ReturnRef(listViewModeMock));
+    EXPECT_CALL(listViewModeMock, clearSelectionList());
+    EXPECT_CALL(listViewModeMock, addSelectionListItem(_, _)).Times(AtLeast(1));
+
+    objectUnderTest.setCurrentRecipent(recipent);
+
+    objectUnderTest.callTimeout();
+
+    auto currentMode = objectUnderTest.getCurrentMode();
+    EXPECT_EQ(currentMode.first, CurrentView::HomeMenu);
+    EXPECT_EQ(currentMode.second, &listViewModeMock);
+}
+
+TEST_F(UserPortTestSuite, shallShowCallRequest)
+{
+    common::PhoneNumber recipent{123};
+
+    EXPECT_CALL(guiMock, setCallMode()).WillOnce(ReturnRef(callModeMock));
+    EXPECT_CALL(callModeMock, appendIncomingText(_)).Times(AtLeast(1));
+
+    objectUnderTest.showCallRequest(recipent);
+
+    auto currentMode = objectUnderTest.getCurrentMode();
+    auto currentRecipent = objectUnderTest.getCurrentRecipent();
+    EXPECT_EQ(currentMode.first, CurrentView::IncomingCall);
+    EXPECT_EQ(currentMode.second, &callModeMock);
+    EXPECT_EQ(currentRecipent, recipent);
+}
+
+TEST_F(UserPortTestSuite, shallShowPeerDisconnected)
+{
+    EXPECT_CALL(callModeMock, appendIncomingText(_));
+
+    objectUnderTest.setCurrentMode(CurrentView::Call, &callModeMock);
+    objectUnderTest.showPeerUserDisconnected();
+}
+
+TEST_F(UserPortTestSuite, shallShowNotAvaible)
+{
+    common::PhoneNumber recipent{123};
+    EXPECT_CALL(guiMock, showPeerUserNotAvailable(recipent));
+    objectUnderTest.showNotAvailable(recipent);
+}
+
+TEST_F(UserPortTestSuite, shallShowPeerNotConnected)
+{
+    common::PhoneNumber recipent{123};
+    EXPECT_CALL(callModeMock, appendIncomingText(_));
+
+    EXPECT_CALL(guiMock, setListViewMode()).WillOnce(ReturnRef(listViewModeMock));
+    EXPECT_CALL(listViewModeMock, clearSelectionList());
+    EXPECT_CALL(listViewModeMock, addSelectionListItem(_, _)).Times(AtLeast(1));
+
+    objectUnderTest.setCurrentMode(CurrentView::Call, &callModeMock);
+
+    objectUnderTest.showPeerNotConnected(recipent);
+
+    auto currentMode = objectUnderTest.getCurrentMode();
+    EXPECT_EQ(currentMode.first, CurrentView::HomeMenu);
+    EXPECT_EQ(currentMode.second, &listViewModeMock);
+}
+
+TEST_F(UserPortTestSuite, shallShowPeerConnected)
+{
+    common::PhoneNumber recipent{123};
+
+    EXPECT_CALL(callModeMock, appendIncomingText(_)).Times(AtLeast(1));
+    objectUnderTest.setCurrentMode(CurrentView::Call, &callModeMock);
+
+    objectUnderTest.showPeerConnected(recipent);
+
+    auto currentMode = objectUnderTest.getCurrentMode();
+    EXPECT_EQ(currentMode.first, CurrentView::Call);
+    EXPECT_EQ(currentMode.second, &callModeMock);
+}
+
+TEST_F(UserPortTestSuite, shallShowCallDropped)
+{
+    common::PhoneNumber recipent{123};
+
+    EXPECT_CALL(callModeMock, appendIncomingText(_)).Times(AtLeast(1));
+
+    EXPECT_CALL(guiMock, setListViewMode()).WillOnce(ReturnRef(listViewModeMock));
+    EXPECT_CALL(listViewModeMock, clearSelectionList());
+    EXPECT_CALL(listViewModeMock, addSelectionListItem(_, _)).Times(AtLeast(1));
+    objectUnderTest.setCurrentMode(CurrentView::Call, &callModeMock);
+
+    objectUnderTest.showCallDropped(recipent);
+
+    auto currentMode = objectUnderTest.getCurrentMode();
+    EXPECT_EQ(currentMode.first, CurrentView::HomeMenu);
+    EXPECT_EQ(currentMode.second, &listViewModeMock);
 }
 
 }

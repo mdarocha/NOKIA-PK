@@ -40,6 +40,11 @@ void BaseState::handleSendSms(common::PhoneNumber recipent, std::string message)
 {
     logger.logError("Uexpected: handleSendSms");
 }
+
+void BaseState::handleSendCallRequest(common::PhoneNumber)
+{
+    logger.logError("Uexpected: handleSendCallRequest");
+}
   
 void BaseState::handleDisconnect()
 {
@@ -49,6 +54,46 @@ void BaseState::handleDisconnect()
 void BaseState::handleReceivedSms(common::PhoneNumber sender, std::string message)
 {
     logger.logError("Uexpected: handleReceivedSms");
+}
+
+void BaseState::handleReceivedCallRequest(common::PhoneNumber recipient)
+{
+    logger.logError("Uexpected: handleReceivedCallRequest");
+}
+
+void BaseState::handleSendCallAccept(common::PhoneNumber recipient)
+{
+    logger.logError("Uexpected: handleSendCallAccept");
+}
+
+void BaseState::handleSendCallDropped(common::PhoneNumber recipient)
+{
+    logger.logError("Uexpected: handleSendCallDroppped");
+}
+
+void BaseState::handleUnknownRecipientAfterCallAccepted()
+{
+    logger.logError("Uexpected: handleUnknownRecipientAfterCallAccepted");
+}
+
+void BaseState::handleSendCallDrop(common::PhoneNumber)
+{
+    logger.logError("Unexpected: handleSendCallDrop");
+}
+
+void BaseState::handleReceivedCallAccepted(common::PhoneNumber recipient)
+{
+    logger.logError("Unexpected: handleReceivedCallAccepted from", recipient);
+}
+
+void BaseState::handleReceivedCallDropped(common::PhoneNumber recipient)
+{
+    logger.logError("Unexpected: handleReceivedCallDropped from", recipient);
+}
+
+void BaseState::handlePeerNotConnected(common::PhoneNumber recipient)
+{
+    logger.logError("Unexpected: handleUnknownRecipient after CallRequest");
 }
 
 }
