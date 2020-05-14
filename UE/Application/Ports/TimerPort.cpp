@@ -24,7 +24,7 @@ void TimerPort::stop()
 void TimerPort::startTimer(Duration duration)
 {
     logger.logDebug("Start timer: ", duration.count(), "ms");
-    setTimeOut(duration);
+    setTimeout(duration);
 }
 
 void TimerPort::stopTimer()
@@ -33,7 +33,7 @@ void TimerPort::stopTimer()
     clearTimer = true;
 }
 
-void TimerPort::setTimeOut(Duration duration)
+void TimerPort::setTimeout(Duration duration)
 {
     clearTimer = false;
     std::thread t{[=](){

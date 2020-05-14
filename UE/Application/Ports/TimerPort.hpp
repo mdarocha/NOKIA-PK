@@ -24,7 +24,7 @@ private:
 
     bool clearTimer = false;
 
-    void setTimeOut(Duration);
+    void setTimeout(Duration);
 };
 
 }
