@@ -47,6 +47,12 @@ DbMessage DbPort::getMessage(int id)
     return db->get<DbMessage>(id);
 }
 
-
+void DbPort::storeBtsId(const common::BtsId id)
+{
+    //all according to the documentation :)
+    if(id != btsIdStorage) {
+        btsIdStorage = id;
+    }
+}
 
 }

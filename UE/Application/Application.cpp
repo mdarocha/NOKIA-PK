@@ -54,6 +54,7 @@ void Application::handleSendCallRequest(common::PhoneNumber recipient)
 
 void Application::handleDisconnect()
 {
+    context.timer.stopTimer();
     context.setState<NotConnectedState>();
 }
 

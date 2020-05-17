@@ -47,6 +47,7 @@ TEST_F(ApplicationNotConnectedTestSuite, shallSetNotConnectedStateAtStartup)
 TEST_F(ApplicationNotConnectedTestSuite, shallSetNotConnectedStateAtDisconnectEvent)
 {
     EXPECT_CALL(userPortMock, showNotConnected());
+    EXPECT_CALL(timerPortMock, stopTimer());
     objectUnderTest.handleDisconnect();
 }
 
@@ -83,6 +84,12 @@ TEST_F(ApplicationConnectingTestSuite, shallHandleDisconnect)
     EXPECT_CALL(userPortMock, showNotConnected());
     EXPECT_CALL(timerPortMock, stopTimer());
     objectUnderTest.handleDisconnect();
+}
+
+TEST_F(ApplicationConnectingTestSuite, shallStoreNewSib)
+{
+    EXPECT_CALL(dbPortMock, storeBtsId(BTS_ID));
+    objectUnderTest.handleSib(BTS_ID);
 }
 
 struct ApplicationConnectedTestSuite : ApplicationConnectingTestSuite {
