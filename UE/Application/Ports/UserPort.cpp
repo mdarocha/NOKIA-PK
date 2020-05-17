@@ -22,6 +22,7 @@ void UserPort::start(IUserEventsHandler &handler, IDbPort& dbPort)
     gui.setTitle("Nokia 3310: " + to_string(phoneNumber));
     gui.setAcceptCallback([this]() { handleAcceptClicked(); });
     gui.setRejectCallback([this]() { handleRejectClicked(); });
+    gui.setCloseGuard([this]() { return closeGuard(); });
 }
 
 void UserPort::stop()
@@ -152,6 +153,12 @@ void UserPort::handleRejectClicked()
             break;
         }
     }
+}
+
+bool UserPort::closeGuard()
+{
+    handler->handleClose();
+    return true;
 }
 
 void UserPort::handleHomeClicked()

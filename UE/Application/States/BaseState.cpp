@@ -98,6 +98,6 @@ void BaseState::handlePeerNotConnected(common::PhoneNumber recipient)
 
 void BaseState::handleClose()
 {
-
+    context.timer.stopTimer();
 }
 }
