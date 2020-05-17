@@ -17,6 +17,7 @@ public:
     MOCK_METHOD(void, handleSendCallDropped, (common::PhoneNumber), (final));
     MOCK_METHOD(void, handleSendCallRequest, (common::PhoneNumber), (final));
     MOCK_METHOD(void, handleSendCallDrop, (common::PhoneNumber), (final));
+    MOCK_METHOD(void, handleClose, (), (final));
 };
 
 class IUserPortMock : public IUserPort

@@ -209,4 +209,29 @@ TEST_F(ApplicationTalkingTestSuite, shallHandleUnknownRecipentAfterAccepted)
     objectUnderTest.handleUnknownRecipientAfterCallAccepted();
 }
 
+
+//test for every state
+TEST_F(ApplicationNotConnectedTestSuite, shallHandleClose)
+{
+    EXPECT_CALL(timerPortMock, stopTimer());
+    objectUnderTest.handleClose();
+}
+
+TEST_F(ApplicationConnectingTestSuite, shallHandleClose)
+{
+    EXPECT_CALL(timerPortMock, stopTimer());
+    objectUnderTest.handleClose();
+}
+
+TEST_F(ApplicationConnectedTestSuite, shallHandleClose)
+{
+    EXPECT_CALL(timerPortMock, stopTimer());
+    objectUnderTest.handleClose();
+}
+
+TEST_F(ApplicationTalkingTestSuite, shallHandleClose)
+{
+    EXPECT_CALL(timerPortMock, stopTimer());
+    objectUnderTest.handleClose();
+}
 }

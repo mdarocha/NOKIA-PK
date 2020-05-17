@@ -35,6 +35,7 @@ public:
     void handleSendCallAccept(common::PhoneNumber recipient) override;
     void handleSendCallDropped(common::PhoneNumber recipient) override;
     void handleSendCallRequest(common::PhoneNumber) override;
+    void handleClose() override;
 protected:
     Context& context;
 

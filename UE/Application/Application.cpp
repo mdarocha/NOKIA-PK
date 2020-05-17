@@ -103,4 +103,9 @@ void Application::handlePeerNotConnected(common::PhoneNumber recipient)
 
 }
 
+void Application::handleClose()
+{
+    context.state->handleClose();
+}
+
 }

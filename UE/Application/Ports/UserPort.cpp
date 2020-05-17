@@ -52,7 +52,7 @@ void UserPort::handleAcceptClicked()
             }
             break;
         }
-        case CurrentView::NewSms: 
+        case CurrentView::NewSms:
         {
             auto menu = (IUeGui::ISmsComposeMode*)current.second;
             auto recipent = menu->getPhoneNumber();

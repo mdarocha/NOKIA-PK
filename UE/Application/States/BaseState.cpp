@@ -96,4 +96,8 @@ void BaseState::handlePeerNotConnected(common::PhoneNumber recipient)
     logger.logError("Unexpected: handleUnknownRecipient after CallRequest");
 }
 
+void BaseState::handleClose()
+{
+
+}
 }
