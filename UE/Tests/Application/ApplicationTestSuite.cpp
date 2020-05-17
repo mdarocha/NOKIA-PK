@@ -78,6 +78,13 @@ TEST_F(ApplicationConnectingTestSuite, shallShowNotConnectedOnTimeout)
     objectUnderTest.handleTimeout();
 }
 
+TEST_F(ApplicationConnectingTestSuite, shallHandleDisconnect)
+{
+    EXPECT_CALL(userPortMock, showNotConnected());
+    EXPECT_CALL(timerPortMock, stopTimer());
+    objectUnderTest.handleDisconnect();
+}
+
 struct ApplicationConnectedTestSuite : ApplicationConnectingTestSuite {
     ApplicationConnectedTestSuite() {
         EXPECT_CALL(userPortMock, showConnected());

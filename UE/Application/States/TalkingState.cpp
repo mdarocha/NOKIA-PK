@@ -10,7 +10,7 @@ TalkingState::TalkingState(Context& context, common::PhoneNumber recipient)
 {
 }
 
-void TalkingState::handleUnknownRecipientAfterCallAccepted(){
+void TalkingState::handleUnknownRecipientAfterCallAccepted() {
     context.user.showPeerUserDisconnected();
 }
 
