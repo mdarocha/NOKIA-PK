@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Messages/PhoneNumber.hpp"
+#include "Messages/BtsId.hpp"
 #include <string>
 #include <vector>
 
@@ -31,6 +32,8 @@ public:
     virtual int saveReceivedSms(const common::PhoneNumber& from, const std::string& message) = 0;
     virtual std::vector<DbMessage> getAllMessages() = 0;
     virtual DbMessage getMessage(int id) = 0;
+
+    virtual void storeBtsId(const common::BtsId id) = 0;
 };
 
 }

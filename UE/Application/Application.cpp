@@ -51,9 +51,10 @@ void Application::handleSendCallRequest(common::PhoneNumber recipient)
 {
     context.state->handleSendCallRequest(recipient);
 }
-  
+
 void Application::handleDisconnect()
 {
+    context.timer.stopTimer();
     context.setState<NotConnectedState>();
 }
 
@@ -101,6 +102,11 @@ void Application::handlePeerNotConnected(common::PhoneNumber recipient)
 {
     context.state->handlePeerNotConnected(recipient);
 
+}
+
+void Application::handleClose()
+{
+    context.state->handleClose();
 }
 
 }

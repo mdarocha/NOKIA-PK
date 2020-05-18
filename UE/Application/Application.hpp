@@ -45,6 +45,7 @@ public:
     void handleSendCallAccept(common::PhoneNumber recipent) override;
     void handleSendCallDropped(common::PhoneNumber recipent) override;
     void handleSendCallRequest(common::PhoneNumber recipient) override;
+    void handleClose() override;
 private:
     Context context;
     common::PrefixedLogger logger;
