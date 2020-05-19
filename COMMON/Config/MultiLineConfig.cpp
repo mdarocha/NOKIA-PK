@@ -7,7 +7,7 @@ namespace common
 MultiLineConfig::MultiLineConfig(std::istream &is)
 {
     std::string line;
-    while (std::getline(is, line))
+    while (is.peek() != EOF && std::getline(is, line))
     {
         if (line.empty())
         {
