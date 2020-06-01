@@ -230,7 +230,7 @@ void QtUeGui::showNewSms()
 
 void QtUeGui::hideNewSms()
 {
-    //emit setNewMessageSignal(true);
+    emit setNewMessageSignal(false);
 }
 
 void QtUeGui::showPeerUserNotAvailable(PhoneNumber peer)

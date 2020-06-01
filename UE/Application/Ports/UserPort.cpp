@@ -281,6 +281,8 @@ void UserPort::showSms(int id)
 {
     auto menu = (IUeGui::ITextMode*) &gui.setViewTextMode();
     DbMessage message = dbPort->getMessage(id);
+    gui.hideNewSms();
+
     std::ostringstream messageString;
 
     if(message.fromNumber == phoneNumber.value)
