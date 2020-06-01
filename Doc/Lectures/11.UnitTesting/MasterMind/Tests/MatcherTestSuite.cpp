@@ -12,13 +12,13 @@ struct MatcherTestSuite : public Test
     Matcher objectUnderTest;
 };
 
-TEST_F(MatcherTestSuite, shallMatchNone)
+TEST_F(MatcherTestSuite, shallMatchExact)
 {
-    Pattern pattern{"AAAA"};
-    Guess guess{"BBBB"};
+    Pattern pattern{"abcd"};
+    Guess guess{"abcd"};
 
     GuessResult result = objectUnderTest.match(pattern, guess);
-    EXPECT_EQ(0u, result.exactMatches);
+    EXPECT_EQ(4u, result.exactMatches);
     EXPECT_EQ(0u, result.partialMatches);
 }
 
