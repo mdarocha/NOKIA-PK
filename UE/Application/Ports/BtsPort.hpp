@@ -19,6 +19,7 @@ public:
     void sendSms(common::PhoneNumber recipent, std::string message) override;
     void sendCallAccept(common::PhoneNumber recipient) override;
     void sendCallDropped(common::PhoneNumber recipient) override;
+    void sendCallDropped(common::PhoneNumber from, common::PhoneNumber to) override;
     void sendCallRequest(common::PhoneNumber) override;
 private:
     void handleMessage(BinaryMessage msg);

@@ -34,6 +34,7 @@ public:
     void handleSendSms(common::PhoneNumber recipent, std::string message) override;
     void handleSendCallAccept(common::PhoneNumber recipient) override;
     void handleSendCallDropped(common::PhoneNumber recipient) override;
+    void handleSendCallDropped(common::PhoneNumber from, common::PhoneNumber to) override;
     void handleSendCallRequest(common::PhoneNumber) override;
     void handleClose() override;
 protected:

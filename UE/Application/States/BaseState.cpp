@@ -71,6 +71,11 @@ void BaseState::handleSendCallDropped(common::PhoneNumber recipient)
     logger.logError("Uexpected: handleSendCallDroppped");
 }
 
+void BaseState::handleSendCallDropped(common::PhoneNumber from, common::PhoneNumber to)
+{
+    logger.logError("Uexpected: handleSendCallDropppedAfterCallAccept");
+}
+
 void BaseState::handleUnknownRecipientAfterCallAccepted()
 {
     logger.logError("Uexpected: handleUnknownRecipientAfterCallAccepted");
