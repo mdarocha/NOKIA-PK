@@ -120,6 +120,8 @@ TEST_F(UserPortTestSuite, shallShowSmsDetail)
     DbMessage msg{1, "test", 2, 3, 0};
 
     EXPECT_CALL(dbPortMock, getMessage(1)).WillOnce(Return(msg));
+    EXPECT_CALL(dbPortMock, markAsRead(1));
+
     EXPECT_CALL(textModeMock, setText(_));
 
     objectUnderTest.setCurrentMode(CurrentView::SmsList, &listViewModeMock);

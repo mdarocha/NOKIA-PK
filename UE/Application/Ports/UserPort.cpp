@@ -272,7 +272,12 @@ void UserPort::showSmsList()
             }
             else
             {
-                menu->addSelectionListItem("From: " + std::to_string(m.fromNumber), m.text);
+                if(m.status == (int)MessageStatus::not_read) {
+                    menu->addSelectionListItem("! From: " + std::to_string(m.fromNumber), m.text);
+                } else {
+                    menu->addSelectionListItem("From: " + std::to_string(m.fromNumber), m.text);
+                }
+
             }
         }
     }
@@ -299,6 +304,8 @@ void UserPort::showSms(int id)
     messageString << message.text << std::endl;
     menu->setText(messageString.str());
     setCurrentMode(CurrentView::TextView, menu);
+
+    dbPort->markAsRead(id);
 }
 
 }

@@ -4,6 +4,7 @@
 #include "sqlite_orm.h"
 #include "Messages/PhoneNumber.hpp"
 #include "Messages/BtsId.hpp"
+#include "Logger/PrefixedLogger.hpp"
 #include "IDbPort.hpp"
 
 namespace ue
@@ -29,7 +30,7 @@ using Storage = decltype(initStorage(""));
 class DbPort : public IDbPort
 {
     public:
-        DbPort(common::PhoneNumber number);
+        DbPort(common::PhoneNumber number, common::ILogger& logger);
         void start();
         void stop();
 
@@ -37,10 +38,12 @@ class DbPort : public IDbPort
         int saveReceivedSms(const common::PhoneNumber& from, const std::string& message) override;
         std::vector<DbMessage> getAllMessages() override;
         DbMessage getMessage(int id) override;
+        void markAsRead(int id) override;
 
         void storeBtsId(const common::BtsId id) override;
     private:
         common::PhoneNumber phoneNumber;
+        common::PrefixedLogger logger;
         std::string databasePath;
         std::unique_ptr<Storage> db;
 
