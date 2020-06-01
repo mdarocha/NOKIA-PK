@@ -132,6 +132,52 @@ TEST_F(UserPortTestSuite, shallShowSmsDetail)
     EXPECT_EQ(currentMode.second, &textModeMock);
 }
 
+TEST_F(UserPortTestSuite, shallHideNewMessageIconWhenAllMessagesRead)
+{
+    EXPECT_CALL(listViewModeMock, getCurrentItemIndex()).WillOnce(Return(std::pair<bool, unsigned>(true, UserPort::ListSmsItem)));
+    EXPECT_CALL(guiMock, setListViewMode()).WillOnce(ReturnRef(listViewModeMock));
+
+    EXPECT_CALL(guiMock, hideNewSms());
+
+    std::vector<DbMessage> msgs;
+    msgs.push_back(DbMessage{ 0, "test", 123, 124, (int) MessageStatus::read });
+    msgs.push_back(DbMessage{ 1, "test2", 123, 124, (int) MessageStatus::read });
+    msgs.push_back(DbMessage{ 1, "test3", 124, 125, (int) MessageStatus::sent });
+    EXPECT_CALL(dbPortMock, getAllMessages()).WillOnce(Return(msgs));
+
+    EXPECT_CALL(listViewModeMock, clearSelectionList());
+    EXPECT_CALL(listViewModeMock, addSelectionListItem(_, _)).Times(AtLeast(1));
+
+    objectUnderTest.setCurrentMode(CurrentView::HomeMenu, &listViewModeMock);
+    acceptCallback();
+
+    auto currentMode = objectUnderTest.getCurrentMode();
+    EXPECT_EQ(currentMode.first, CurrentView::SmsList);
+    EXPECT_EQ(currentMode.second, &listViewModeMock);
+}
+
+TEST_F(UserPortTestSuite, shallNotHideNewMessageIconWhenNotAllMessagesRead)
+{
+    EXPECT_CALL(listViewModeMock, getCurrentItemIndex()).WillOnce(Return(std::pair<bool, unsigned>(true, UserPort::ListSmsItem)));
+    EXPECT_CALL(guiMock, setListViewMode()).WillOnce(ReturnRef(listViewModeMock));
+
+    std::vector<DbMessage> msgs;
+    msgs.push_back(DbMessage{ 0, "test", 123, 124, (int) MessageStatus::read });
+    msgs.push_back(DbMessage{ 1, "test2", 123, 124, (int) MessageStatus::not_read });
+    msgs.push_back(DbMessage{ 1, "test3", 124, 125, (int) MessageStatus::sent });
+    EXPECT_CALL(dbPortMock, getAllMessages()).WillOnce(Return(msgs));
+
+    EXPECT_CALL(listViewModeMock, clearSelectionList());
+    EXPECT_CALL(listViewModeMock, addSelectionListItem(_, _)).Times(AtLeast(1));
+
+    objectUnderTest.setCurrentMode(CurrentView::HomeMenu, &listViewModeMock);
+    acceptCallback();
+
+    auto currentMode = objectUnderTest.getCurrentMode();
+    EXPECT_EQ(currentMode.first, CurrentView::SmsList);
+    EXPECT_EQ(currentMode.second, &listViewModeMock);
+}
+
 TEST_F(UserPortTestSuite, shallShowDialOnItemClick)
 {
     EXPECT_CALL(listViewModeMock, getCurrentItemIndex()).WillOnce(Return(std::pair<bool, unsigned>(true, UserPort::NewCallItem)));
