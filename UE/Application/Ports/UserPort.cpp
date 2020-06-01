@@ -258,12 +258,14 @@ void UserPort::showSmsList()
     auto messages = dbPort->getAllMessages();
     auto menu = (IUeGui::IListViewMode*) &gui.setListViewMode();
     menu->clearSelectionList();
+
     if(messages.empty())
     {
         menu->addSelectionListItem("No messages to view :)", "No messages");
     }
     else
     {
+        bool can_clear_icon = true;
         for(auto& m : messages)
         {
             if(m.fromNumber == phoneNumber.value)
@@ -274,11 +276,16 @@ void UserPort::showSmsList()
             {
                 if(m.status == (int)MessageStatus::not_read) {
                     menu->addSelectionListItem("! From: " + std::to_string(m.fromNumber), m.text);
+                    can_clear_icon = false;
                 } else {
                     menu->addSelectionListItem("From: " + std::to_string(m.fromNumber), m.text);
                 }
 
             }
+        }
+
+        if(can_clear_icon) {
+            gui.hideNewSms();
         }
     }
     setCurrentMode(CurrentView::SmsList, menu);
