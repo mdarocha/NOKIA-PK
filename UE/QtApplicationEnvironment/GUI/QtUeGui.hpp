@@ -48,9 +48,10 @@ public:
     void showConnected() override;
     void showConnecting() override;
     void showNotConnected() override;
-    void showNewSms() override;
     void showPeerUserNotAvailable(PhoneNumber peer) override;
 
+    void showNewSms() override;
+    void hideNewSms() override;
 
     IListViewMode& setListViewMode() override;
     ISmsComposeMode& setSmsComposeMode() override;
