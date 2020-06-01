@@ -36,9 +36,5 @@ jobs:
     - name: make
       run: make -j2
 
-    - name: UE tests
-      run: ./UE/Tests/Application/UeApplicationUT
-    - name: BTS tests
-      run: ./BTS/Tests/Application/BtsApplicationUT
-    - name: Common tests
-      run: ./COMMON/Tests/COMMON_UT
+    - name: make test
+      run: make -j2 test
