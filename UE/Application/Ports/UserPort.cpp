@@ -180,6 +180,8 @@ void UserPort::showConnecting()
 
 void UserPort::showConnected()
 {
+    gui.showConnected();
+
     auto menu = (IUeGui::IListViewMode*) &gui.setListViewMode();
     menu->clearSelectionList();
     menu->addSelectionListItem("Compose SMS", "Create new SMS");
