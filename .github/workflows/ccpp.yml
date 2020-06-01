@@ -34,7 +34,7 @@ jobs:
       run: cmake .
 
     - name: make
-      run: make -j2
+      run: make -j$(nproc)
 
     - name: make test
-      run: make -j2 test
+      run: make -j$(nproc) test
