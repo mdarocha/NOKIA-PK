@@ -237,4 +237,20 @@ TEST_F(BtsPortTestSuite, shallHandleUnknownRecipientToCallAccept)
     messageCallback(msg.getMessage());
 }
 
+TEST_F(BtsPortTestSuite, shallSendCallDroppedAfterCallAccept)
+{
+    common::BinaryMessage msg;
+    EXPECT_CALL(transportMock, sendMessage(_)).WillOnce([&msg](auto param) { msg = std::move(param); return true; });
+
+    auto recipent = common::PhoneNumber{123};
+
+    objectUnderTest.sendCallDropped(PHONE_NUMBER,recipent);
+
+    common::IncomingMessage reader(msg);
+    ASSERT_NO_THROW(EXPECT_EQ(common::MessageId::CallDropped, reader.readMessageId()));
+    ASSERT_NO_THROW(EXPECT_EQ(PHONE_NUMBER, reader.readPhoneNumber()));
+    ASSERT_NO_THROW(EXPECT_EQ(recipent, reader.readPhoneNumber()));
+    ASSERT_NO_THROW(reader.checkEndOfMessage());
+}
+
 }

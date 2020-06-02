@@ -16,6 +16,7 @@ void TalkingState::handleUnknownRecipientAfterCallAccepted() {
 
 void TalkingState::handleSendCallDropped(common::PhoneNumber from, common::PhoneNumber to) {
     context.bts.sendCallDropped(from, to);
+    context.timer.stopTimer();
     context.setState<ConnectedState>();
     context.user.showConnected();
 }

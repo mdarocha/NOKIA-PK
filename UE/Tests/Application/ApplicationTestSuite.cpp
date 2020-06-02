@@ -223,6 +223,23 @@ TEST_F(ApplicationTalkingTestSuite, shallHandleUnknownRecipentAfterAccepted)
     objectUnderTest.handleUnknownRecipientAfterCallAccepted();
 }
 
+TEST_F(ApplicationTalkingTestSuite, shallHandleSendCallDropped)
+{
+    common::PhoneNumber recipient{123};
+
+    EXPECT_CALL(userPortMock, showConnected());
+    EXPECT_CALL(btsPortMock, sendCallDropped(PHONE_NUMBER,recipient));
+    objectUnderTest.handleSendCallDropped(PHONE_NUMBER,recipient);
+}
+
+TEST_F(ApplicationTalkingTestSuite, shallHandleReceiveCallDropped)
+{
+    common::PhoneNumber recipient{123};
+
+    EXPECT_CALL(userPortMock, showCallDropped(recipient));
+    EXPECT_CALL(timerPortMock, stopTimer());
+    objectUnderTest.handleReceivedCallDropped(recipient);
+}
 
 //test for every state
 TEST_F(ApplicationNotConnectedTestSuite, shallHandleClose)
