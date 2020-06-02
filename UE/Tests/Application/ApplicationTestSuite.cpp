@@ -162,6 +162,7 @@ TEST_F(ApplicationConnectedTestSuite, shallHandleReceivedCallAccept)
 {
     common::PhoneNumber recipent{123};
 
+    EXPECT_CALL(timerPortMock, startTimer(_));
     EXPECT_CALL(timerPortMock, stopTimer());
     EXPECT_CALL(userPortMock, showPeerConnected(recipent));
 
