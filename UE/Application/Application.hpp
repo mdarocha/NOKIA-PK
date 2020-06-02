@@ -36,6 +36,7 @@ public:
     void handleReceivedCallDropped(common::PhoneNumber) override;
     void handleDisconnect() override;
     void handleUnknownRecipientAfterCallAccepted() override;
+
     void handleSendCallDrop(common::PhoneNumber) override;
     virtual void handlePeerNotConnected(common::PhoneNumber) override;
     void handleReceivedCallTalk(common::PhoneNumber, std::string) override;
@@ -46,6 +47,7 @@ public:
     void handleSendCallDropped(common::PhoneNumber recipent) override;
     void handleSendCallRequest(common::PhoneNumber recipient) override;
     void handleSendCallTalk(std::string) override;
+    void handleClose() override;
 private:
     Context context;
     common::PrefixedLogger logger;

@@ -22,6 +22,7 @@ void UserPort::start(IUserEventsHandler &handler, IDbPort& dbPort)
     gui.setTitle("Nokia 3310: " + to_string(phoneNumber));
     gui.setAcceptCallback([this]() { handleAcceptClicked(); });
     gui.setRejectCallback([this]() { handleRejectClicked(); });
+    gui.setCloseGuard([this]() { return closeGuard(); });
 }
 
 void UserPort::stop()
@@ -52,7 +53,7 @@ void UserPort::handleAcceptClicked()
             }
             break;
         }
-        case CurrentView::NewSms: 
+        case CurrentView::NewSms:
         {
             auto menu = (IUeGui::ISmsComposeMode*)current.second;
             auto recipent = menu->getPhoneNumber();
@@ -156,6 +157,12 @@ void UserPort::handleRejectClicked()
             break;
         }
     }
+}
+
+bool UserPort::closeGuard()
+{
+    handler->handleClose();
+    return true;
 }
 
 void UserPort::handleHomeClicked()

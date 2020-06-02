@@ -51,9 +51,10 @@ void Application::handleSendCallRequest(common::PhoneNumber recipient)
 {
     context.state->handleSendCallRequest(recipient);
 }
-  
+
 void Application::handleDisconnect()
 {
+    context.timer.stopTimer();
     context.setState<NotConnectedState>();
 }
 
@@ -111,6 +112,11 @@ void Application::handleSendCallTalk(std::string text)
 void Application::handleReceivedCallTalk(common::PhoneNumber recipient, std::string text)
 {
     context.state->handleReceivedCallTalk(recipient, text);
+}
+
+void Application::handleClose()
+{
+    context.state->handleClose();
 }
 
 }

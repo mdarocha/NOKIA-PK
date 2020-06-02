@@ -106,4 +106,9 @@ void BaseState::handleReceivedCallTalk(common::PhoneNumber, std::string)
     logger.logError("Unexpected: handleReceivedCallTalk");
 }
 
+void BaseState::handleClose()
+{
+    context.timer.stopTimer();
+}
+
 }

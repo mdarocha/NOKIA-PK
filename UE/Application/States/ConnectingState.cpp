@@ -34,4 +34,8 @@ void ue::ConnectingState::handleTimeout()
     context.setState<NotConnectedState>();
 }
 
+void ue::ConnectingState::handleSib(common::BtsId id)
+{
+    context.db.storeBtsId(id);
+}
 }

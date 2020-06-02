@@ -60,6 +60,7 @@ private:
     void handleAcceptClicked();
     void handleRejectClicked();
     void handleHomeClicked();
+    bool closeGuard();
 
     CurrentView currentView;
     IUeGui::BaseMode* currentMode;

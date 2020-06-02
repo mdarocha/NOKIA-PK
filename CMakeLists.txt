@@ -10,6 +10,8 @@ option(SqliteOrm_BuildTests OFF)
 
 set_compiler_options()
 
+enable_testing()
+
 add_subdirectory(googletest)
 add_subdirectory(UE)
 add_subdirectory(BTS)

@@ -47,6 +47,7 @@ TEST_F(ApplicationNotConnectedTestSuite, shallSetNotConnectedStateAtStartup)
 TEST_F(ApplicationNotConnectedTestSuite, shallSetNotConnectedStateAtDisconnectEvent)
 {
     EXPECT_CALL(userPortMock, showNotConnected());
+    EXPECT_CALL(timerPortMock, stopTimer());
     objectUnderTest.handleDisconnect();
 }
 
@@ -76,6 +77,19 @@ TEST_F(ApplicationConnectingTestSuite, shallShowNotConnectedOnTimeout)
 {
     EXPECT_CALL(userPortMock, showNotConnected());
     objectUnderTest.handleTimeout();
+}
+
+TEST_F(ApplicationConnectingTestSuite, shallHandleDisconnect)
+{
+    EXPECT_CALL(userPortMock, showNotConnected());
+    EXPECT_CALL(timerPortMock, stopTimer());
+    objectUnderTest.handleDisconnect();
+}
+
+TEST_F(ApplicationConnectingTestSuite, shallStoreNewSib)
+{
+    EXPECT_CALL(dbPortMock, storeBtsId(BTS_ID));
+    objectUnderTest.handleSib(BTS_ID);
 }
 
 struct ApplicationConnectedTestSuite : ApplicationConnectingTestSuite {
@@ -209,4 +223,29 @@ TEST_F(ApplicationTalkingTestSuite, shallHandleUnknownRecipentAfterAccepted)
     objectUnderTest.handleUnknownRecipientAfterCallAccepted();
 }
 
+
+//test for every state
+TEST_F(ApplicationNotConnectedTestSuite, shallHandleClose)
+{
+    EXPECT_CALL(timerPortMock, stopTimer());
+    objectUnderTest.handleClose();
+}
+
+TEST_F(ApplicationConnectingTestSuite, shallHandleClose)
+{
+    EXPECT_CALL(timerPortMock, stopTimer());
+    objectUnderTest.handleClose();
+}
+
+TEST_F(ApplicationConnectedTestSuite, shallHandleClose)
+{
+    EXPECT_CALL(timerPortMock, stopTimer());
+    objectUnderTest.handleClose();
+}
+
+TEST_F(ApplicationTalkingTestSuite, shallHandleClose)
+{
+    EXPECT_CALL(timerPortMock, stopTimer());
+    objectUnderTest.handleClose();
+}
 }

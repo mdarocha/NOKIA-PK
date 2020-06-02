@@ -28,6 +28,7 @@ protected:
 
     IUeGui::Callback acceptCallback;
     IUeGui::Callback rejectCallback;
+    IUeGui::CloseGuard closeGuard;
 
     UserPort objectUnderTest{loggerMock, guiMock, PHONE_NUMBER};
 
@@ -38,7 +39,8 @@ protected:
             .WillOnce(SaveArg<0>(&acceptCallback));
         EXPECT_CALL(guiMock, setRejectCallback(_))
             .WillOnce(SaveArg<0>(&rejectCallback));
-
+        EXPECT_CALL(guiMock, setCloseGuard(_))
+            .WillOnce(SaveArg<0>(&closeGuard));
         objectUnderTest.start(handlerMock, dbPortMock);
     }
     ~UserPortTestSuite()
@@ -388,6 +390,13 @@ TEST_F(UserPortTestSuite, shallShowCallDropped)
     auto currentMode = objectUnderTest.getCurrentMode();
     EXPECT_EQ(currentMode.first, CurrentView::HomeMenu);
     EXPECT_EQ(currentMode.second, &listViewModeMock);
+}
+
+TEST_F(UserPortTestSuite, shallEmitCloseEvent)
+{
+    EXPECT_CALL(handlerMock, handleClose());
+    bool shouldClose = closeGuard();
+    EXPECT_EQ(shouldClose, true);
 }
 
 }

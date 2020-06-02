@@ -12,21 +12,25 @@ using namespace ::testing;
 struct GameTestSuite : public Test
 {
     IMatcherMock matcherMock;
-    Pattern pattern{"ABCD"};
+    Pattern pattern{"abcd"};
     Matcher<const Pattern&> matchPattern
        =  Field(&Pattern::value, pattern.value);
     Game objectUnderTest{matcherMock, pattern};
 };
 
-TEST_F(GameTestSuite, shallReturnTrueOnExactMatch)
+TEST_F(GameTestSuite, shallReturnOnFirstExactMatch)
 {
-    Guess guess{"ABCD"};
+    std::stringstream input{"abcd"};
+    std::stringstream output;
+    Presentation presentation{input, output};
+
+    auto matchGuess = Field(&Guess::value, "abcd");
     GuessResult success {4u, 0u};
 
-    EXPECT_CALL(matcherMock, match(matchPattern, _))
+    EXPECT_CALL(matcherMock, match(matchPattern, matchGuess))
             .WillOnce(Return(success));
 
-    ASSERT_TRUE(objectUnderTest.verify(guess));
+    objectUnderTest.run(presentation);
 }
 
 
