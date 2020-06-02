@@ -16,3 +16,5 @@ _deps
 *syslog*
 .vscode/
 build/
+**/Tests/**/*_include.cmake
+**/Tests/**/*_tests.cmake

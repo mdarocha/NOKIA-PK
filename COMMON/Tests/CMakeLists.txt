@@ -14,5 +14,5 @@ target_link_libraries(${PROJECT_NAME} CommonUtMocks)
 target_link_libraries(${PROJECT_NAME} Common)
 target_link_gtest()
 
-
-
+include(GoogleTest)
+gtest_discover_tests(${PROJECT_NAME})
