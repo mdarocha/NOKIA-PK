@@ -2,6 +2,8 @@
 
 #include "ITimerPort.hpp"
 #include "Logger/PrefixedLogger.hpp"
+#include <deque>
+#include <thread>
 
 namespace ue
 {
@@ -22,9 +24,7 @@ private:
     common::PrefixedLogger logger;
     ITimerEventsHandler* handler = nullptr;
 
-    bool clearTimer = false;
-
-    void setTimeout(Duration);
+    std::deque<std::pair<std::thread::id, bool>> clearQueue;
 };
 
 }
