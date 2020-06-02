@@ -163,7 +163,7 @@ TEST_F(ApplicationConnectedTestSuite, shallHandleReceivedCallAccept)
     using namespace std::chrono_literals;
     common::PhoneNumber recipent{123};
 
-    EXPECT_CALL(timerPortMock, startTimer(120000ms));
+    EXPECT_CALL(timerPortMock, startTimer(ue::TalkingMessageTimeout));
     EXPECT_CALL(timerPortMock, stopTimer());
     EXPECT_CALL(userPortMock, showPeerConnected(recipent));
 
@@ -212,7 +212,7 @@ struct ApplicationTalkingTestSuite : ApplicationConnectedTestSuite {
         common::PhoneNumber recipent{123};
         EXPECT_CALL(btsPortMock, sendCallAccept(recipent));
         EXPECT_CALL(timerPortMock, stopTimer());
-        EXPECT_CALL(timerPortMock, startTimer(120000ms));
+        EXPECT_CALL(timerPortMock, startTimer(ue::TalkingMessageTimeout));
         objectUnderTest.handleSendCallAccept(recipent);
     }
 };
@@ -259,7 +259,7 @@ TEST_F(ApplicationTalkingTestSuite, shallHandleSendCallTalk)
     common::PhoneNumber recipient{123};
     using namespace std::chrono_literals;
     EXPECT_CALL(timerPortMock, stopTimer());
-    EXPECT_CALL(timerPortMock, startTimer(120000ms));
+    EXPECT_CALL(timerPortMock, startTimer(ue::TalkingMessageTimeout));
     EXPECT_CALL(btsPortMock, sendCallTalk(recipient, "test"));
 
     objectUnderTest.handleSendCallTalk("test");
@@ -272,7 +272,7 @@ TEST_F(ApplicationTalkingTestSuite, shallHandleReceivedCallTalk)
 
     using namespace std::chrono_literals;
     EXPECT_CALL(timerPortMock, stopTimer());
-    EXPECT_CALL(timerPortMock, startTimer(120000ms));
+    EXPECT_CALL(timerPortMock, startTimer(ue::TalkingMessageTimeout));
     EXPECT_CALL(userPortMock, showNewCallTalk(recipient, text));
 
     objectUnderTest.handleReceivedCallTalk(recipient, text);

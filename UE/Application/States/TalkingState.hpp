@@ -4,6 +4,7 @@
 
 namespace ue
 {
+constexpr std::chrono::milliseconds TalkingMessageTimeout{120000};
 
 class TalkingState : public BaseState
 {

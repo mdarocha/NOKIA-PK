@@ -9,7 +9,7 @@ TalkingState::TalkingState(Context& context, common::PhoneNumber recipient)
       recipient(recipient)
 {
     using namespace std::chrono_literals;
-    context.timer.startTimer(2min);
+    context.timer.startTimer(ue::TalkingMessageTimeout);
 }
 
 void TalkingState::handleUnknownRecipientAfterCallAccepted() {
@@ -20,7 +20,7 @@ void TalkingState::handleSendCallTalk(std::string text)
 {
     using namespace std::chrono_literals;
     context.timer.stopTimer();
-    context.timer.startTimer(2min);
+    context.timer.startTimer(ue::TalkingMessageTimeout);
     context.bts.sendCallTalk(recipient, text);
 }
 
@@ -28,7 +28,7 @@ void TalkingState::handleReceivedCallTalk(common::PhoneNumber recipient, std::st
 {
     using namespace std::chrono_literals;
     context.timer.stopTimer();
-    context.timer.startTimer(2min);
+    context.timer.startTimer(ue::TalkingMessageTimeout);
     if(recipient == this->recipient)
         context.user.showNewCallTalk(recipient, text);
     else

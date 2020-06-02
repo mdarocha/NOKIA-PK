@@ -5,6 +5,7 @@
 #include "Messages/PhoneNumber.hpp"
 #include "IEventsHandler.hpp"
 #include "Context.hpp"
+#include "States/TalkingState.hpp"
 
 namespace ue
 {
