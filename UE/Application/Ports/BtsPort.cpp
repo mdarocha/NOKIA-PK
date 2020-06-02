@@ -81,6 +81,11 @@ void BtsPort::handleMessage(BinaryMessage msg)
                }
                case common::MessageId::CallAccepted:{
                    handler->handleUnknownRecipientAfterCallAccepted();
+                   break;
+               }
+               case common::MessageId::CallTalk:{
+                   handler->handlePeerNotConnected(failTo);
+                   break;
                }
                default:
                    logger.logError("Recieved unknow recipient of unknow message: ", failMsgId, ", from: ", failFrom);

@@ -12,6 +12,8 @@ public:
     void handleUnknownRecipientAfterCallAccepted() final;
     void handleSendCallTalk(std::string) final;
     void handleReceivedCallTalk(common::PhoneNumber, std::string) override;
+    void handleTimeout() override;
+    void handlePeerNotConnected(common::PhoneNumber) override;
 
 private:    
 	common::PhoneNumber recipient;

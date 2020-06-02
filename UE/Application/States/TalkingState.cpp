@@ -1,5 +1,5 @@
 #include "TalkingState.hpp"
-
+#include "ConnectedState.hpp"
 
 namespace ue
 {
@@ -33,6 +33,20 @@ void TalkingState::handleReceivedCallTalk(common::PhoneNumber recipient, std::st
         context.user.showNewCallTalk(recipient, text);
     else
         context.logger.logError("Recipient from actual talk is different than received.");
+}
+
+void TalkingState::handleTimeout()
+{
+    context.bts.sendCallDropped(recipient);
+    context.user.showCallDropped(recipient);
+    context.setState<ConnectedState>();
+}
+
+void TalkingState::handlePeerNotConnected(common::PhoneNumber recipient)
+{
+    context.timer.stopTimer();
+    context.user.showPeerNotConnected(recipient);
+    context.setState<ConnectedState>();
 }
 
 }

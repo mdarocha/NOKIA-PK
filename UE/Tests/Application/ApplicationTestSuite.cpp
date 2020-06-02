@@ -160,9 +160,10 @@ TEST_F(ApplicationConnectedTestSuite, shallSendCallDropped)
 
 TEST_F(ApplicationConnectedTestSuite, shallHandleReceivedCallAccept)
 {
+    using namespace std::chrono_literals;
     common::PhoneNumber recipent{123};
 
-    EXPECT_CALL(timerPortMock, startTimer(_));
+    EXPECT_CALL(timerPortMock, startTimer(120000ms));
     EXPECT_CALL(timerPortMock, stopTimer());
     EXPECT_CALL(userPortMock, showPeerConnected(recipent));
 
