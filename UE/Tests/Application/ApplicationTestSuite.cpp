@@ -278,7 +278,7 @@ TEST_F(ApplicationTalkingTestSuite, shallHandleReceivedCallTalk)
     objectUnderTest.handleReceivedCallTalk(recipient, text);
 }
 
-TEST_F(ApplicationTalkingTestSuite, shallShowMainMenuAfterTimeout)
+TEST_F(ApplicationTalkingTestSuite, shallHandleTimeout)
 {
     common::PhoneNumber recipient{123};
     EXPECT_CALL(btsPortMock, sendCallDropped(recipient));
