@@ -44,7 +44,6 @@ void TalkingState::handleTimeout()
 
 void TalkingState::handlePeerNotConnected(common::PhoneNumber recipient)
 {
-    context.timer.stopTimer();
     context.user.showPeerNotConnected(recipient);
     context.setState<ConnectedState>();
 }

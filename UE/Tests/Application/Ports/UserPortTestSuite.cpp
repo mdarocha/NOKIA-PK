@@ -399,4 +399,28 @@ TEST_F(UserPortTestSuite, shallEmitCloseEvent)
     EXPECT_EQ(shouldClose, true);
 }
 
+TEST_F(UserPortTestSuite, shallShowSendedCallTalk)
+{
+    common::PhoneNumber recipent{123};
+
+    EXPECT_CALL(callModeMock, getOutgoingText()).WillOnce(Return("witam"));
+    EXPECT_CALL(callModeMock, clearOutgoingText());
+    EXPECT_CALL(callModeMock, appendIncomingText("me: witam")).Times(AtLeast(1));
+    EXPECT_CALL(handlerMock, handleSendCallTalk("witam"));
+
+    objectUnderTest.setCurrentMode(CurrentView::Call, &callModeMock);
+    acceptCallback();
+}
+
+TEST_F(UserPortTestSuite, shallShowReceivedCallTalk)
+{
+    common::PhoneNumber recipient{123};
+    std::string text = "test";
+
+    EXPECT_CALL(callModeMock, appendIncomingText("123: "+text));
+
+    objectUnderTest.setCurrentMode(CurrentView::Call, &callModeMock);
+    objectUnderTest.showNewCallTalk(recipient, text);
+}
+
 }

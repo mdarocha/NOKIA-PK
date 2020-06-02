@@ -253,4 +253,53 @@ TEST_F(ApplicationTalkingTestSuite, shallHandleClose)
     EXPECT_CALL(timerPortMock, stopTimer());
     objectUnderTest.handleClose();
 }
+
+TEST_F(ApplicationTalkingTestSuite, shallHandleSendCallTalk)
+{
+    common::PhoneNumber recipient{123};
+    using namespace std::chrono_literals;
+    EXPECT_CALL(timerPortMock, stopTimer());
+    EXPECT_CALL(timerPortMock, startTimer(120000ms));
+    EXPECT_CALL(btsPortMock, sendCallTalk(recipient, "test"));
+
+    objectUnderTest.handleSendCallTalk("test");
+}
+
+TEST_F(ApplicationTalkingTestSuite, shallHandleReceivedCallTalk)
+{
+    common::PhoneNumber recipient{123};
+    std::string text = "test";
+
+    using namespace std::chrono_literals;
+    EXPECT_CALL(timerPortMock, stopTimer());
+    EXPECT_CALL(timerPortMock, startTimer(120000ms));
+    EXPECT_CALL(userPortMock, showNewCallTalk(recipient, text));
+
+    objectUnderTest.handleReceivedCallTalk(recipient, text);
+}
+
+TEST_F(ApplicationTalkingTestSuite, shallShowMainMenuAfterTimeout)
+{
+    common::PhoneNumber recipient{123};
+    EXPECT_CALL(btsPortMock, sendCallDropped(recipient));
+    EXPECT_CALL(userPortMock, showCallDropped(recipient));
+
+    EXPECT_CALL(userPortMock, showConnected());
+    EXPECT_CALL(timerPortMock, stopTimer());
+
+    objectUnderTest.handleTimeout();
+}
+
+TEST_F(ApplicationTalkingTestSuite, shallHandlePeerNotConnectedAfterUnknowRecipient)
+{
+    common::PhoneNumber recipient{123};
+
+    EXPECT_CALL(userPortMock, showPeerNotConnected(recipient));
+
+    EXPECT_CALL(userPortMock, showConnected());
+    EXPECT_CALL(timerPortMock, stopTimer());
+
+    objectUnderTest.handlePeerNotConnected(recipient);
+}
+
 }
