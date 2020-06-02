@@ -87,7 +87,11 @@ void UserPort::handleAcceptClicked()
         }
         case CurrentView::Call:
         {
-            //to be implemented
+            auto menu = (IUeGui::ICallMode*) current.second;
+            auto text = menu->getOutgoingText();
+            menu->clearOutgoingText();
+            menu->appendIncomingText("me: "+text);
+            handler->handleSendCallTalk(text);
             break;
         }
         case CurrentView::SmsList:
@@ -233,8 +237,14 @@ void UserPort::showPeerConnected(common::PhoneNumber recipient)
 void UserPort::showCallDropped(common::PhoneNumber recipient)
 {
     auto mode = (IUeGui::ICallMode *)currentMode;
-    mode->appendIncomingText("Peer drop call");
+    mode->appendIncomingText("Peer "+to_string(recipient)+" drop call");
     showConnected();
+}
+
+void UserPort::showNewCallTalk(common::PhoneNumber recipient, std::string text)
+{
+    auto mode = (IUeGui::ICallMode*)currentMode;
+    mode->appendIncomingText(to_string(recipient)+": "+text);
 }
 
 void UserPort::callTimeout()

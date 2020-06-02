@@ -28,7 +28,8 @@ public:
     void handleSendCallDrop(common::PhoneNumber) override;
     void handlePeerNotConnected(common::PhoneNumber) override;
     void handleUnknownRecipientAfterCallAccepted() override;
-
+    void handleSendCallTalk(std::string) override;
+    void handleReceivedCallTalk(common::PhoneNumber, std::string) override;
 
     //IUserEventsHandler interface
     void handleSendSms(common::PhoneNumber recipent, std::string message) override;

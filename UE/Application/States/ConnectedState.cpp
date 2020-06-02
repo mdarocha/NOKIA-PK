@@ -77,6 +77,7 @@ void ConnectedState::handleReceivedCallRequest(common::PhoneNumber recipient)
 void ConnectedState::handleSendCallAccept(common::PhoneNumber recipient)
 {
     context.bts.sendCallAccept(recipient);
+    context.timer.stopTimer();
     context.setState<TalkingState>(recipient);
 }
 
