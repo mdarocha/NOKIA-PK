@@ -206,8 +206,11 @@ TEST_F(ApplicationConnectedTestSuite, shallHandleTimeout)
 
 struct ApplicationTalkingTestSuite : ApplicationConnectedTestSuite {
     ApplicationTalkingTestSuite() {
+        using namespace std::chrono_literals;
         common::PhoneNumber recipent{123};
         EXPECT_CALL(btsPortMock, sendCallAccept(recipent));
+        EXPECT_CALL(timerPortMock, stopTimer());
+        EXPECT_CALL(timerPortMock, startTimer(120000ms));
         objectUnderTest.handleSendCallAccept(recipent);
     }
 };
