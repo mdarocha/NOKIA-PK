@@ -104,6 +104,16 @@ void Application::handlePeerNotConnected(common::PhoneNumber recipient)
 
 }
 
+void Application::handleSendCallTalk(std::string text)
+{
+    context.state->handleSendCallTalk(text);
+}
+
+void Application::handleReceivedCallTalk(common::PhoneNumber recipient, std::string text)
+{
+    context.state->handleReceivedCallTalk(recipient, text);
+}
+
 void Application::handleClose()
 {
     context.state->handleClose();

@@ -18,3 +18,4 @@ _deps
 build/
 **/Tests/**/*_include.cmake
 **/Tests/**/*_tests.cmake
+*.orig

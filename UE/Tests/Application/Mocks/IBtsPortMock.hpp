@@ -22,6 +22,7 @@ public:
     MOCK_METHOD(void, handlePeerNotConnected, (common::PhoneNumber), (final));
     MOCK_METHOD(void, handleDisconnect, (), (final));
     MOCK_METHOD(void, handleUnknownRecipientAfterCallAccepted, (), (final));
+    MOCK_METHOD(void, handleReceivedCallTalk, (common::PhoneNumber, std::string), (final));
 
 };
 
@@ -36,6 +37,7 @@ public:
     MOCK_METHOD(void, sendCallAccept, (common::PhoneNumber), (final));
     MOCK_METHOD(void, sendCallDropped, (common::PhoneNumber), (final));
     MOCK_METHOD(void, sendCallRequest, (common::PhoneNumber), (final));
+    MOCK_METHOD(void, sendCallTalk, (common::PhoneNumber, std::string), (final));
 };
 
 }
