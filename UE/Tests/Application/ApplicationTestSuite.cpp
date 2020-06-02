@@ -227,7 +227,10 @@ TEST_F(ApplicationTalkingTestSuite, shallHandleSendCallDropped)
 {
     common::PhoneNumber recipient{123};
 
+    //setting ConnectedState
     EXPECT_CALL(userPortMock, showConnected());
+    EXPECT_CALL(timerPortMock, stopTimer());
+
     EXPECT_CALL(btsPortMock, sendCallDropped(PHONE_NUMBER,recipient));
     objectUnderTest.handleSendCallDropped(PHONE_NUMBER,recipient);
 }
@@ -236,8 +239,11 @@ TEST_F(ApplicationTalkingTestSuite, shallHandleReceiveCallDropped)
 {
     common::PhoneNumber recipient{123};
 
-    EXPECT_CALL(userPortMock, showCallDropped(recipient));
+    //setting ConnectedState
+    EXPECT_CALL(userPortMock, showConnected());
     EXPECT_CALL(timerPortMock, stopTimer());
+
+    EXPECT_CALL(userPortMock, showCallDropped(recipient));
     objectUnderTest.handleReceivedCallDropped(recipient);
 }
 
