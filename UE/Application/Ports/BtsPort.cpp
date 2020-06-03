@@ -176,6 +176,16 @@ void BtsPort::sendCallDropped(common::PhoneNumber recipient)
     transport.sendMessage(msg.getMessage());
 }
 
+void BtsPort::sendCallDropped(common::PhoneNumber from, common::PhoneNumber to)
+{
+    logger.logDebug("sendCallDropAfterCallAccept: ", to);
+    common::OutgoingMessage msg{};
+    msg.writeMessageId(common::MessageId::CallDropped);
+    msg.writePhoneNumber(phoneNumber);
+    msg.writePhoneNumber(to);
+    transport.sendMessage(msg.getMessage());
+}
+
 void BtsPort::sendCallTalk(common::PhoneNumber recipient, std::string text)
 {
     logger.logDebug("sned Call Talk: ", recipient);

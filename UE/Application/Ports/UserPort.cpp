@@ -153,6 +153,12 @@ void UserPort::handleRejectClicked()
             showSmsList();
             break;
         }
+        case CurrentView::Call:
+        {
+            logger.logDebug("Call dropped after call accept");
+            handler->handleSendCallDropped(phoneNumber, getCurrentRecipent());
+            break;
+        }
         default: {
             break;
         }
@@ -205,7 +211,7 @@ void UserPort::showCallRequest(common::PhoneNumber recipient)
     setCurrentRecipent(recipient);
     setCurrentMode(CurrentView::IncomingCall, &gui.setCallMode());
     auto info = (IUeGui::ICallMode*) currentMode;
-    info->appendIncomingText("Incomig from " + to_string(recipient));
+    info->appendIncomingText("Incoming call from " + to_string(recipient));
 }
 
 void UserPort::showPeerUserDisconnected()

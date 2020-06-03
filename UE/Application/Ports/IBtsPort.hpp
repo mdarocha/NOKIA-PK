@@ -33,6 +33,7 @@ public:
     virtual void sendSms(common::PhoneNumber, std::string) = 0;
     virtual void sendCallAccept(common::PhoneNumber) = 0;
     virtual void sendCallDropped(common::PhoneNumber) = 0;
+    virtual void sendCallDropped(common::PhoneNumber, common::PhoneNumber) = 0;
     virtual void sendCallRequest(common::PhoneNumber) = 0;
     virtual void sendCallTalk(common::PhoneNumber, std::string) = 0;
 };

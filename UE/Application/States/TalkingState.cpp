@@ -48,4 +48,16 @@ void TalkingState::handlePeerNotConnected(common::PhoneNumber recipient)
     context.setState<ConnectedState>();
 }
 
+void TalkingState::handleSendCallDropped(common::PhoneNumber from, common::PhoneNumber to) {
+    context.bts.sendCallDropped(from, to);
+    context.setState<ConnectedState>();
+}
+
+void TalkingState::handleReceivedCallDropped(common::PhoneNumber recipient)
+{
+    context.logger.logDebug("Recived Call dropped from ", recipient);
+    context.setState<ConnectedState>();
+    context.user.showCallDropped(recipient);
+}
+
 }

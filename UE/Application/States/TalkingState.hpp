@@ -11,6 +11,8 @@ class TalkingState : public BaseState
 public:
     TalkingState(Context& context, common::PhoneNumber recipient);
     void handleUnknownRecipientAfterCallAccepted() final;
+    void handleSendCallDropped(common::PhoneNumber from, common::PhoneNumber to) final;
+    void handleReceivedCallDropped(common::PhoneNumber recipient) final;
     void handleSendCallTalk(std::string) final;
     void handleReceivedCallTalk(common::PhoneNumber, std::string) override;
     void handleTimeout() override;
