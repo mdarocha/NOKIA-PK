@@ -6,7 +6,7 @@ using namespace sqlite_orm;
 namespace ue
 {
 
-DbPort::DbPort(common::PhoneNumber number) : phoneNumber(number)
+DbPort::DbPort(common::PhoneNumber number, common::ILogger& logger) : phoneNumber(number), logger(logger, "[DB-PORT]")
 {
     std::ostringstream os;
     os << "db-" << (int) number.value << ".db";
@@ -45,6 +45,17 @@ std::vector<DbMessage> DbPort::getAllMessages()
 DbMessage DbPort::getMessage(int id)
 {
     return db->get<DbMessage>(id);
+}
+
+void DbPort::markAsRead(int id)
+{
+    auto msg = db->get<DbMessage>(id);
+    if(msg.status != (int)MessageStatus::sent) {
+        msg.status = (int)MessageStatus::read;
+        db->update<DbMessage>(msg);
+    } else {
+
+    }
 }
 
 void DbPort::storeBtsId(const common::BtsId id)

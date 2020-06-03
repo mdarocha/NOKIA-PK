@@ -69,6 +69,7 @@ TEST_F(UserPortTestSuite, shallShowConnecting)
 
 TEST_F(UserPortTestSuite, shallShowMenuOnConnected)
 {
+    EXPECT_CALL(guiMock, showConnected());
     EXPECT_CALL(guiMock, setListViewMode()).WillOnce(ReturnRef(listViewModeMock));
     EXPECT_CALL(listViewModeMock, clearSelectionList());
     EXPECT_CALL(listViewModeMock, addSelectionListItem(_, _)).Times(AtLeast(1));
@@ -119,6 +120,8 @@ TEST_F(UserPortTestSuite, shallShowSmsDetail)
     DbMessage msg{1, "test", 2, 3, 0};
 
     EXPECT_CALL(dbPortMock, getMessage(1)).WillOnce(Return(msg));
+    EXPECT_CALL(dbPortMock, markAsRead(1));
+
     EXPECT_CALL(textModeMock, setText(_));
 
     objectUnderTest.setCurrentMode(CurrentView::SmsList, &listViewModeMock);
@@ -127,6 +130,52 @@ TEST_F(UserPortTestSuite, shallShowSmsDetail)
     auto currentMode = objectUnderTest.getCurrentMode();
     EXPECT_EQ(currentMode.first, CurrentView::TextView);
     EXPECT_EQ(currentMode.second, &textModeMock);
+}
+
+TEST_F(UserPortTestSuite, shallHideNewMessageIconWhenAllMessagesRead)
+{
+    EXPECT_CALL(listViewModeMock, getCurrentItemIndex()).WillOnce(Return(std::pair<bool, unsigned>(true, UserPort::ListSmsItem)));
+    EXPECT_CALL(guiMock, setListViewMode()).WillOnce(ReturnRef(listViewModeMock));
+
+    EXPECT_CALL(guiMock, hideNewSms());
+
+    std::vector<DbMessage> msgs;
+    msgs.push_back(DbMessage{ 0, "test", 123, 124, (int) MessageStatus::read });
+    msgs.push_back(DbMessage{ 1, "test2", 123, 124, (int) MessageStatus::read });
+    msgs.push_back(DbMessage{ 1, "test3", 124, 125, (int) MessageStatus::sent });
+    EXPECT_CALL(dbPortMock, getAllMessages()).WillOnce(Return(msgs));
+
+    EXPECT_CALL(listViewModeMock, clearSelectionList());
+    EXPECT_CALL(listViewModeMock, addSelectionListItem(_, _)).Times(AtLeast(1));
+
+    objectUnderTest.setCurrentMode(CurrentView::HomeMenu, &listViewModeMock);
+    acceptCallback();
+
+    auto currentMode = objectUnderTest.getCurrentMode();
+    EXPECT_EQ(currentMode.first, CurrentView::SmsList);
+    EXPECT_EQ(currentMode.second, &listViewModeMock);
+}
+
+TEST_F(UserPortTestSuite, shallNotHideNewMessageIconWhenNotAllMessagesRead)
+{
+    EXPECT_CALL(listViewModeMock, getCurrentItemIndex()).WillOnce(Return(std::pair<bool, unsigned>(true, UserPort::ListSmsItem)));
+    EXPECT_CALL(guiMock, setListViewMode()).WillOnce(ReturnRef(listViewModeMock));
+
+    std::vector<DbMessage> msgs;
+    msgs.push_back(DbMessage{ 0, "test", 123, 124, (int) MessageStatus::read });
+    msgs.push_back(DbMessage{ 1, "test2", 123, 124, (int) MessageStatus::not_read });
+    msgs.push_back(DbMessage{ 1, "test3", 124, 125, (int) MessageStatus::sent });
+    EXPECT_CALL(dbPortMock, getAllMessages()).WillOnce(Return(msgs));
+
+    EXPECT_CALL(listViewModeMock, clearSelectionList());
+    EXPECT_CALL(listViewModeMock, addSelectionListItem(_, _)).Times(AtLeast(1));
+
+    objectUnderTest.setCurrentMode(CurrentView::HomeMenu, &listViewModeMock);
+    acceptCallback();
+
+    auto currentMode = objectUnderTest.getCurrentMode();
+    EXPECT_EQ(currentMode.first, CurrentView::SmsList);
+    EXPECT_EQ(currentMode.second, &listViewModeMock);
 }
 
 TEST_F(UserPortTestSuite, shallShowDialOnItemClick)
@@ -144,6 +193,7 @@ TEST_F(UserPortTestSuite, shallShowDialOnItemClick)
 
 TEST_F(UserPortTestSuite, shallSendSmsEventOnSmsSend)
 {
+    EXPECT_CALL(guiMock, showConnected());
     EXPECT_CALL(guiMock, setListViewMode()).WillOnce(ReturnRef(listViewModeMock));
     EXPECT_CALL(listViewModeMock, clearSelectionList());
     EXPECT_CALL(listViewModeMock, addSelectionListItem(_, _)).Times(AtLeast(1));
@@ -167,6 +217,7 @@ TEST_F(UserPortTestSuite, shallSendSmsEventOnSmsSend)
 
 TEST_F(UserPortTestSuite, shallExitSmsCreationOnReject)
 {
+    EXPECT_CALL(guiMock, showConnected());
     EXPECT_CALL(guiMock, setListViewMode()).WillOnce(ReturnRef(listViewModeMock));
     EXPECT_CALL(listViewModeMock, clearSelectionList());
     EXPECT_CALL(listViewModeMock, addSelectionListItem(_, _)).Times(AtLeast(1));
@@ -179,6 +230,7 @@ TEST_F(UserPortTestSuite, shallExitSmsCreationOnReject)
 
 TEST_F(UserPortTestSuite, shallExitSmsList)
 {
+    EXPECT_CALL(guiMock, showConnected());
     EXPECT_CALL(guiMock, setListViewMode()).WillOnce(ReturnRef(listViewModeMock));
     EXPECT_CALL(listViewModeMock, clearSelectionList());
     EXPECT_CALL(listViewModeMock, addSelectionListItem(_, _)).Times(AtLeast(1));
@@ -260,6 +312,7 @@ TEST_F(UserPortTestSuite, shallRejectIncomingCall)
 
 TEST_F(UserPortTestSuite, shallReturnToMenuFromCall)
 {
+    EXPECT_CALL(guiMock, showConnected());
     EXPECT_CALL(guiMock, setListViewMode()).WillOnce(ReturnRef(listViewModeMock));
     EXPECT_CALL(listViewModeMock, clearSelectionList());
     EXPECT_CALL(listViewModeMock, addSelectionListItem(_, _)).Times(AtLeast(1));
@@ -279,6 +332,7 @@ TEST_F(UserPortTestSuite, shallRejectOutgoingCall)
     EXPECT_CALL(handlerMock, handleSendCallDrop(recipent));
     EXPECT_CALL(callModeMock, appendIncomingText(_)).Times(AtLeast(1));
 
+    EXPECT_CALL(guiMock, showConnected());
     EXPECT_CALL(guiMock, setListViewMode()).WillOnce(ReturnRef(listViewModeMock));
     EXPECT_CALL(listViewModeMock, clearSelectionList());
     EXPECT_CALL(listViewModeMock, addSelectionListItem(_, _)).Times(AtLeast(1));
@@ -298,6 +352,7 @@ TEST_F(UserPortTestSuite, shallHandleCallTimeout)
 
     EXPECT_CALL(handlerMock, handleSendCallDrop(recipent));
 
+    EXPECT_CALL(guiMock, showConnected());
     EXPECT_CALL(guiMock, setListViewMode()).WillOnce(ReturnRef(listViewModeMock));
     EXPECT_CALL(listViewModeMock, clearSelectionList());
     EXPECT_CALL(listViewModeMock, addSelectionListItem(_, _)).Times(AtLeast(1));
@@ -347,6 +402,7 @@ TEST_F(UserPortTestSuite, shallShowPeerNotConnected)
     common::PhoneNumber recipent{123};
     EXPECT_CALL(callModeMock, appendIncomingText(_));
 
+    EXPECT_CALL(guiMock, showConnected());
     EXPECT_CALL(guiMock, setListViewMode()).WillOnce(ReturnRef(listViewModeMock));
     EXPECT_CALL(listViewModeMock, clearSelectionList());
     EXPECT_CALL(listViewModeMock, addSelectionListItem(_, _)).Times(AtLeast(1));
@@ -380,6 +436,7 @@ TEST_F(UserPortTestSuite, shallShowCallDropped)
 
     EXPECT_CALL(callModeMock, appendIncomingText(_)).Times(AtLeast(1));
 
+    EXPECT_CALL(guiMock, showConnected());
     EXPECT_CALL(guiMock, setListViewMode()).WillOnce(ReturnRef(listViewModeMock));
     EXPECT_CALL(listViewModeMock, clearSelectionList());
     EXPECT_CALL(listViewModeMock, addSelectionListItem(_, _)).Times(AtLeast(1));
@@ -397,6 +454,30 @@ TEST_F(UserPortTestSuite, shallEmitCloseEvent)
     EXPECT_CALL(handlerMock, handleClose());
     bool shouldClose = closeGuard();
     EXPECT_EQ(shouldClose, true);
+}
+
+TEST_F(UserPortTestSuite, shallShowSendedCallTalk)
+{
+    common::PhoneNumber recipent{123};
+
+    EXPECT_CALL(callModeMock, getOutgoingText()).WillOnce(Return("witam"));
+    EXPECT_CALL(callModeMock, clearOutgoingText());
+    EXPECT_CALL(callModeMock, appendIncomingText("me: witam")).Times(AtLeast(1));
+    EXPECT_CALL(handlerMock, handleSendCallTalk("witam"));
+
+    objectUnderTest.setCurrentMode(CurrentView::Call, &callModeMock);
+    acceptCallback();
+}
+
+TEST_F(UserPortTestSuite, shallShowReceivedCallTalk)
+{
+    common::PhoneNumber recipient{123};
+    std::string text = "test";
+
+    EXPECT_CALL(callModeMock, appendIncomingText("123: "+text));
+
+    objectUnderTest.setCurrentMode(CurrentView::Call, &callModeMock);
+    objectUnderTest.showNewCallTalk(recipient, text);
 }
 
 TEST_F(UserPortTestSuite, shallDropCallAfterCallAccept)

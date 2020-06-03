@@ -4,6 +4,7 @@
 
 namespace ue
 {
+constexpr std::chrono::milliseconds TalkingMessageTimeout{120000};
 
 class TalkingState : public BaseState
 {
@@ -12,6 +13,11 @@ public:
     void handleUnknownRecipientAfterCallAccepted() final;
     void handleSendCallDropped(common::PhoneNumber from, common::PhoneNumber to) final;
     void handleReceivedCallDropped(common::PhoneNumber recipient) final;
+    void handleSendCallTalk(std::string) final;
+    void handleReceivedCallTalk(common::PhoneNumber, std::string) override;
+    void handleTimeout() override;
+    void handlePeerNotConnected(common::PhoneNumber) override;
+
 private:    
 	common::PhoneNumber recipient;
 };

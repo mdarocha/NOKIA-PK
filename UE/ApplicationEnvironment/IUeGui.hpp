@@ -33,8 +33,10 @@ public:
     virtual void showConnected() = 0;
     virtual void showConnecting() = 0;
     virtual void showNotConnected() = 0;
-    virtual void showNewSms() = 0;
     virtual void showPeerUserNotAvailable(PhoneNumber) = 0;
+
+    virtual void showNewSms() = 0;
+    virtual void hideNewSms() = 0;
 
     virtual IListViewMode& setListViewMode() = 0;
     virtual ISmsComposeMode& setSmsComposeMode() = 0;

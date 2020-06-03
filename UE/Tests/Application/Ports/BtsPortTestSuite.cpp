@@ -237,6 +237,50 @@ TEST_F(BtsPortTestSuite, shallHandleUnknownRecipientToCallAccept)
     messageCallback(msg.getMessage());
 }
 
+TEST_F(BtsPortTestSuite, shallSendCallTalk)
+{
+    common::BinaryMessage msg;
+    EXPECT_CALL(transportMock, sendMessage(_)).WillOnce([&msg](auto param) { msg = std::move(param); return true; });
+
+    common::PhoneNumber recipient{123};
+    std::string text = "test";
+
+    objectUnderTest.sendCallTalk(recipient, text);
+
+    common::IncomingMessage reader(msg);
+
+    ASSERT_NO_THROW(EXPECT_EQ(common::MessageId::CallTalk, reader.readMessageId()));
+    ASSERT_NO_THROW(EXPECT_EQ(PHONE_NUMBER, reader.readPhoneNumber()));
+    ASSERT_NO_THROW(EXPECT_EQ(recipient, reader.readPhoneNumber()));
+    ASSERT_NO_THROW(EXPECT_EQ(text, reader.readRemainingText()));
+    ASSERT_NO_THROW(reader.checkEndOfMessage());
+}
+
+TEST_F(BtsPortTestSuite, shallHandleReceivedCallTalk)
+{
+    EXPECT_CALL(handlerMock, handleReceivedCallTalk(common::PhoneNumber{123}, "test"));
+    common::OutgoingMessage msg{common::MessageId::CallTalk,
+                               common::PhoneNumber{123},
+                               PHONE_NUMBER};
+    msg.writeText("test");
+    messageCallback(msg.getMessage());
+}
+
+TEST_F(BtsPortTestSuite, shallHandleUnknownRecipientToCallTalk)
+{
+    common::PhoneNumber recipient{123};
+    EXPECT_CALL(handlerMock, handlePeerNotConnected(recipient));
+
+    common::OutgoingMessage msg{common::MessageId::UnknownRecipient,
+                                common::PhoneNumber{},
+                                PHONE_NUMBER};
+    msg.writeMessageId(common::MessageId::CallTalk);
+    msg.writePhoneNumber(PHONE_NUMBER);
+    msg.writePhoneNumber(recipient);
+
+    messageCallback(msg.getMessage());
+}
+
 TEST_F(BtsPortTestSuite, shallSendCallDroppedAfterCallAccept)
 {
     common::BinaryMessage msg;

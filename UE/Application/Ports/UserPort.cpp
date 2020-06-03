@@ -87,7 +87,11 @@ void UserPort::handleAcceptClicked()
         }
         case CurrentView::Call:
         {
-            //to be implemented
+            auto menu = (IUeGui::ICallMode*) current.second;
+            auto text = menu->getOutgoingText();
+            menu->clearOutgoingText();
+            menu->appendIncomingText("me: "+text);
+            handler->handleSendCallTalk(text);
             break;
         }
         case CurrentView::SmsList:
@@ -186,6 +190,8 @@ void UserPort::showConnecting()
 
 void UserPort::showConnected()
 {
+    gui.showConnected();
+
     auto menu = (IUeGui::IListViewMode*) &gui.setListViewMode();
     menu->clearSelectionList();
     menu->addSelectionListItem("Compose SMS", "Create new SMS");
@@ -237,8 +243,14 @@ void UserPort::showPeerConnected(common::PhoneNumber recipient)
 void UserPort::showCallDropped(common::PhoneNumber recipient)
 {
     auto mode = (IUeGui::ICallMode *)currentMode;
-    mode->appendIncomingText("Peer drop call");
+    mode->appendIncomingText("Peer "+to_string(recipient)+" drop call");
     showConnected();
+}
+
+void UserPort::showNewCallTalk(common::PhoneNumber recipient, std::string text)
+{
+    auto mode = (IUeGui::ICallMode*)currentMode;
+    mode->appendIncomingText(to_string(recipient)+": "+text);
 }
 
 void UserPort::callTimeout()
@@ -262,12 +274,14 @@ void UserPort::showSmsList()
     auto messages = dbPort->getAllMessages();
     auto menu = (IUeGui::IListViewMode*) &gui.setListViewMode();
     menu->clearSelectionList();
+
     if(messages.empty())
     {
         menu->addSelectionListItem("No messages to view :)", "No messages");
     }
     else
     {
+        bool can_clear_icon = true;
         for(auto& m : messages)
         {
             if(m.fromNumber == phoneNumber.value)
@@ -276,8 +290,18 @@ void UserPort::showSmsList()
             }
             else
             {
-                menu->addSelectionListItem("From: " + std::to_string(m.fromNumber), m.text);
+                if(m.status == (int)MessageStatus::not_read) {
+                    menu->addSelectionListItem("! From: " + std::to_string(m.fromNumber), m.text);
+                    can_clear_icon = false;
+                } else {
+                    menu->addSelectionListItem("From: " + std::to_string(m.fromNumber), m.text);
+                }
+
             }
+        }
+
+        if(can_clear_icon) {
+            gui.hideNewSms();
         }
     }
     setCurrentMode(CurrentView::SmsList, menu);
@@ -287,6 +311,7 @@ void UserPort::showSms(int id)
 {
     auto menu = (IUeGui::ITextMode*) &gui.setViewTextMode();
     DbMessage message = dbPort->getMessage(id);
+
     std::ostringstream messageString;
 
     if(message.fromNumber == phoneNumber.value)
@@ -301,6 +326,8 @@ void UserPort::showSms(int id)
     messageString << message.text << std::endl;
     menu->setText(messageString.str());
     setCurrentMode(CurrentView::TextView, menu);
+
+    dbPort->markAsRead(id);
 }
 
 }

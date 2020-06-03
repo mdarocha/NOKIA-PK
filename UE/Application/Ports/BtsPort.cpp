@@ -65,7 +65,7 @@ void BtsPort::handleMessage(BinaryMessage msg)
             break;
         }
         case common::MessageId::UnknownRecipient:
-       {
+        {
            auto failMsgId = reader.readMessageId();
            auto failFrom = reader.readPhoneNumber();
            auto failTo = reader.readPhoneNumber();
@@ -81,13 +81,18 @@ void BtsPort::handleMessage(BinaryMessage msg)
                }
                case common::MessageId::CallAccepted:{
                    handler->handleUnknownRecipientAfterCallAccepted();
+                   break;
+               }
+               case common::MessageId::CallTalk:{
+                   handler->handlePeerNotConnected(failTo);
+                   break;
                }
                default:
                    logger.logError("Recieved unknow recipient of unknow message: ", failMsgId, ", from: ", failFrom);
            }
            break;
-       }
-	case common::MessageId::CallAccepted:
+        }
+        case common::MessageId::CallAccepted:
         {
             logger.logDebug("recived Call accepted");
             handler->handleReceivedCallAccepted(from);
@@ -97,6 +102,12 @@ void BtsPort::handleMessage(BinaryMessage msg)
         {
             logger.logDebug("recived Call dropped");
             handler->handleReceivedCallDropped(from);
+            break;
+        }
+        case common::MessageId::CallTalk:
+        {
+            auto text = reader.readRemainingText();
+            handler->handleReceivedCallTalk(from, text);
             break;
         }
         default:
@@ -172,6 +183,16 @@ void BtsPort::sendCallDropped(common::PhoneNumber from, common::PhoneNumber to)
     msg.writeMessageId(common::MessageId::CallDropped);
     msg.writePhoneNumber(phoneNumber);
     msg.writePhoneNumber(to);
+    transport.sendMessage(msg.getMessage());
+}
+
+void BtsPort::sendCallTalk(common::PhoneNumber recipient, std::string text)
+{
+    logger.logDebug("sned Call Talk: ", recipient);
+    common::OutgoingMessage msg{common::MessageId::CallTalk,
+                                phoneNumber,
+                               recipient};
+    msg.writeText(text);
     transport.sendMessage(msg.getMessage());
 }
 

@@ -5,6 +5,7 @@
 #include "Messages/PhoneNumber.hpp"
 #include "IEventsHandler.hpp"
 #include "Context.hpp"
+#include "States/TalkingState.hpp"
 
 namespace ue
 {
@@ -39,6 +40,7 @@ public:
 
     void handleSendCallDrop(common::PhoneNumber) override;
     virtual void handlePeerNotConnected(common::PhoneNumber) override;
+    void handleReceivedCallTalk(common::PhoneNumber, std::string) override;
 
     //IUserEventsHandler interface
     void handleSendSms(common::PhoneNumber recipent, std::string message) override;
@@ -46,6 +48,7 @@ public:
     void handleSendCallDropped(common::PhoneNumber recipent) override;
     void handleSendCallDropped(common::PhoneNumber from, common::PhoneNumber to) override;
     void handleSendCallRequest(common::PhoneNumber recipient) override;
+    void handleSendCallTalk(std::string) override;
     void handleClose() override;
 private:
     Context context;
