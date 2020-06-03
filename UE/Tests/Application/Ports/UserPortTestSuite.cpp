@@ -399,4 +399,15 @@ TEST_F(UserPortTestSuite, shallEmitCloseEvent)
     EXPECT_EQ(shouldClose, true);
 }
 
+TEST_F(UserPortTestSuite, shallDropCallAfterCallAccept)
+{
+    common::PhoneNumber recipent{123};
+
+    EXPECT_CALL(handlerMock, handleSendCallDropped(PHONE_NUMBER, recipent));
+
+    objectUnderTest.setCurrentRecipent(recipent);
+    objectUnderTest.setCurrentMode(CurrentView::Call, &callModeMock);
+    rejectCallback();
+}
+
 }
