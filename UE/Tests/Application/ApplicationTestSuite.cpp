@@ -252,6 +252,18 @@ TEST_F(ApplicationTalkingTestSuite, shallHandleReceiveCallDropped)
     objectUnderTest.handleReceivedCallDropped(recipient);
 }
 
+TEST_F(ApplicationTalkingTestSuite, shallHandleReceivedSmsWhileTalking)
+{
+    auto sender = common::PhoneNumber{124};
+    auto message = "witaj";
+
+    EXPECT_CALL(userPortMock, showNewSms());
+    EXPECT_CALL(dbPortMock, saveReceivedSms(sender, message));
+
+    objectUnderTest.handleReceivedSms(sender, message);
+}
+
+
 //test for every state
 TEST_F(ApplicationNotConnectedTestSuite, shallHandleClose)
 {

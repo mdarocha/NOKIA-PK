@@ -74,4 +74,10 @@ void TalkingState::handleClose()
     context.timer.stopTimer();
 }
 
+void TalkingState::handleReceivedSms(common::PhoneNumber sender, std::string message)
+{
+    context.db.saveReceivedSms(sender, message);
+    context.user.showNewSms();
+}
+
 }
