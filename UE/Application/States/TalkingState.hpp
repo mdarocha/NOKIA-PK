@@ -17,7 +17,9 @@ public:
     void handleReceivedCallTalk(common::PhoneNumber, std::string) override;
     void handleTimeout() override;
     void handlePeerNotConnected(common::PhoneNumber) override;
+    void handleReceivedCallRequest(common::PhoneNumber) override;
     void handleClose() override;
+    void handleReceivedSms(common::PhoneNumber sender, std::string message) override;
 private:
     common::PhoneNumber recipient;
 };

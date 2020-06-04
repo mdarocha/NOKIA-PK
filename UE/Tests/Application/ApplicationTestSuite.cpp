@@ -252,6 +252,18 @@ TEST_F(ApplicationTalkingTestSuite, shallHandleReceiveCallDropped)
     objectUnderTest.handleReceivedCallDropped(recipient);
 }
 
+TEST_F(ApplicationTalkingTestSuite, shallHandleReceivedSmsWhileTalking)
+{
+    auto sender = common::PhoneNumber{124};
+    auto message = "witaj";
+
+    EXPECT_CALL(userPortMock, showNewSms());
+    EXPECT_CALL(dbPortMock, saveReceivedSms(sender, message));
+
+    objectUnderTest.handleReceivedSms(sender, message);
+}
+
+
 //test for every state
 TEST_F(ApplicationNotConnectedTestSuite, shallHandleClose)
 {
@@ -324,6 +336,22 @@ TEST_F(ApplicationTalkingTestSuite, shallHandlePeerNotConnectedAfterUnknowRecipi
     EXPECT_CALL(timerPortMock, stopTimer());
 
     objectUnderTest.handlePeerNotConnected(recipient);
+}
+
+TEST_F(ApplicationTalkingTestSuite, shallHandleNewCallRequestWhenTalking)
+{
+    common::PhoneNumber recipient{123};
+
+    EXPECT_CALL(btsPortMock, sendCallDropped(recipient));
+    objectUnderTest.handleReceivedCallRequest(recipient);
+}
+
+TEST_F(ApplicationTalkingTestSuite, shallIgnoreReceivedCallDroppedFromNotRecipient)
+{
+    common::PhoneNumber notRecipient{120};
+
+    EXPECT_CALL(userPortMock, showCallDropped(_)).Times(0);
+    objectUnderTest.handleReceivedCallDropped(notRecipient);
 }
 
 }
