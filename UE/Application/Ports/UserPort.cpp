@@ -167,6 +167,12 @@ void UserPort::handleRejectClicked()
 
 bool UserPort::closeGuard()
 {
+    if(currentView == CurrentView::IncomingCall) {
+        handler->handleSendCallDropped(getCurrentRecipent());
+    } else if(currentView == CurrentView::OutgoingCall) {
+        handler->handleSendCallDrop(getCurrentRecipent());
+    }
+
     handler->handleClose();
     return true;
 }
