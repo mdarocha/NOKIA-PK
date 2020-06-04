@@ -208,10 +208,17 @@ void UserPort::showNewSms()
 
 void UserPort::showCallRequest(common::PhoneNumber recipient)
 {
-    setCurrentRecipent(recipient);
-    setCurrentMode(CurrentView::IncomingCall, &gui.setCallMode());
-    auto info = (IUeGui::ICallMode*) currentMode;
-    info->appendIncomingText("Incoming call from " + to_string(recipient));
+    if(currentView == CurrentView::IncomingCall || currentView == CurrentView::OutgoingCall)
+    {
+        handler->handleSendCallDrop(recipient);
+    }
+    else
+    {
+        setCurrentRecipent(recipient);
+        setCurrentMode(CurrentView::IncomingCall, &gui.setCallMode());
+        auto info = (IUeGui::ICallMode*) currentMode;
+        info->appendIncomingText("Incoming call from " + to_string(recipient));
+    }
 }
 
 void UserPort::showPeerUserDisconnected()
