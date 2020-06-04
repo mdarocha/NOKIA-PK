@@ -279,6 +279,24 @@ TEST_F(UserPortTestSuite, shallShowSMSReceivedIconOnSMSReceive)
     objectUnderTest.showNewSms();
 }
 
+TEST_F(UserPortTestSuite, shallRefreshSMSListOnSMSReceive)
+{
+    EXPECT_CALL(guiMock, setListViewMode()).WillOnce(ReturnRef(listViewModeMock));
+
+    EXPECT_CALL(dbPortMock, getAllMessages());
+
+    EXPECT_CALL(listViewModeMock, clearSelectionList());
+    EXPECT_CALL(listViewModeMock, addSelectionListItem(_, _)).Times(AtLeast(1));
+    EXPECT_CALL(guiMock, showNewSms());
+
+    objectUnderTest.setCurrentMode(CurrentView::SmsList, &listViewModeMock);
+    objectUnderTest.showNewSms();
+
+    auto currentMode = objectUnderTest.getCurrentMode();
+    EXPECT_EQ(currentMode.first, CurrentView::SmsList);
+    EXPECT_EQ(currentMode.second, &listViewModeMock);
+}
+
 TEST_F(UserPortTestSuite, shallAcceptIncomingCall)
 {
     common::PhoneNumber recipent{123};

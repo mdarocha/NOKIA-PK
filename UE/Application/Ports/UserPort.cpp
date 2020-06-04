@@ -209,6 +209,8 @@ void UserPort::showConnected()
 
 void UserPort::showNewSms()
 {
+    if(currentView == CurrentView::SmsList)
+        showSmsList();
     gui.showNewSms();
 }
 
