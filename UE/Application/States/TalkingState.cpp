@@ -68,4 +68,10 @@ void TalkingState::handleReceivedCallRequest(common::PhoneNumber recipient)
     context.bts.sendCallDropped(recipient);
 }
 
+void TalkingState::handleClose()
+{
+    context.bts.sendCallDropped(recipient);
+    context.timer.stopTimer();
+}
+
 }

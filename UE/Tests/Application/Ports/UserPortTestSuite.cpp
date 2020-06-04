@@ -474,6 +474,26 @@ TEST_F(UserPortTestSuite, shallEmitCloseEvent)
     EXPECT_EQ(shouldClose, true);
 }
 
+TEST_F(UserPortTestSuite, shallDropIncomingCallOnClose)
+{
+    objectUnderTest.setCurrentMode(CurrentView::IncomingCall, &callModeMock);
+
+    EXPECT_CALL(handlerMock, handleSendCallDropped(_));
+    EXPECT_CALL(handlerMock, handleClose());
+    bool shouldClose = closeGuard();
+    EXPECT_EQ(shouldClose, true);
+}
+
+TEST_F(UserPortTestSuite, shallDropOutgoingCallOnClose)
+{
+    objectUnderTest.setCurrentMode(CurrentView::OutgoingCall, &callModeMock);
+
+    EXPECT_CALL(handlerMock, handleSendCallDrop(_));
+    EXPECT_CALL(handlerMock, handleClose());
+    bool shouldClose = closeGuard();
+    EXPECT_EQ(shouldClose, true);
+}
+
 TEST_F(UserPortTestSuite, shallShowSendedCallTalk)
 {
     common::PhoneNumber recipent{123};

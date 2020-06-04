@@ -19,8 +19,9 @@ public:
     void handlePeerNotConnected(common::PhoneNumber) override;
     void handleReceivedCallRequest(common::PhoneNumber) override;
 
-private:    
-	common::PhoneNumber recipient;
+private:
+    common::PhoneNumber recipient;
+    void handleClose() override;
 };
 
 }
