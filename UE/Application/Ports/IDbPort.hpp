@@ -4,7 +4,7 @@
 #include "Messages/BtsId.hpp"
 #include <string>
 #include <vector>
-#include <bits/unique_ptr.h>
+#include <optional>
 
 namespace ue
 {
@@ -32,7 +32,7 @@ public:
     virtual int saveSentSms(const common::PhoneNumber& to, const std::string& message) = 0;
     virtual int saveReceivedSms(const common::PhoneNumber& from, const std::string& message) = 0;
     virtual std::vector<DbMessage> getAllMessages() = 0;
-    virtual std::unique_ptr<DbMessage> getMessage(int id) = 0;
+    virtual std::optional<DbMessage> getMessage(int id) = 0;
     virtual void markAsRead(int id) = 0;
 
     virtual void storeBtsId(const common::BtsId id) = 0;

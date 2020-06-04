@@ -315,9 +315,9 @@ void UserPort::showSmsList()
 
 void UserPort::showSms(int id)
 {
-    std::unique_ptr<DbMessage> message = dbPort->getMessage(id);
+    std::optional<DbMessage> message = dbPort->getMessage(id);
 
-    if(message == nullptr)
+    if(!message.has_value())
         return;
 
     auto menu = (IUeGui::ITextMode*) &gui.setViewTextMode();

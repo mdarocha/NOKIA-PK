@@ -132,6 +132,20 @@ TEST_F(UserPortTestSuite, shallShowSmsDetail)
     EXPECT_EQ(currentMode.second, &textModeMock);
 }
 
+TEST_F(UserPortTestSuite, shallDoNothingWhenThereIsNoMesssages)
+{
+    EXPECT_CALL(listViewModeMock, getCurrentItemIndex()).WillOnce(Return(std::pair<bool, unsigned>(true, 0)));
+
+    EXPECT_CALL(dbPortMock, getMessage(1)).WillOnce(Return(std::nullopt));
+
+    objectUnderTest.setCurrentMode(CurrentView::SmsList, &listViewModeMock);
+    acceptCallback();
+
+    auto currentMode = objectUnderTest.getCurrentMode();
+    EXPECT_EQ(currentMode.first, CurrentView::SmsList);
+    EXPECT_EQ(currentMode.second, &listViewModeMock);
+}
+
 TEST_F(UserPortTestSuite, shallHideNewMessageIconWhenAllMessagesRead)
 {
     EXPECT_CALL(listViewModeMock, getCurrentItemIndex()).WillOnce(Return(std::pair<bool, unsigned>(true, UserPort::ListSmsItem)));
