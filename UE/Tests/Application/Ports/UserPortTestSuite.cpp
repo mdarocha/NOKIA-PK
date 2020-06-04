@@ -382,6 +382,24 @@ TEST_F(UserPortTestSuite, shallShowCallRequest)
     EXPECT_EQ(currentRecipent, recipent);
 }
 
+TEST_F(UserPortTestSuite, shallIgnoreAnotherCallRequestWhenMakingCall)
+{
+    common::PhoneNumber recipent{123};
+
+    EXPECT_CALL(handlerMock, handleSendCallDrop(recipent));
+    objectUnderTest.setCurrentMode(CurrentView::IncomingCall, &callModeMock);
+    objectUnderTest.showCallRequest(recipent);
+}
+
+TEST_F(UserPortTestSuite, shallIgnoreAnotherCallRequestWhenReceivingCallRequest)
+{
+    common::PhoneNumber recipent{123};
+
+    EXPECT_CALL(handlerMock, handleSendCallDrop(recipent));
+    objectUnderTest.setCurrentMode(CurrentView::IncomingCall, &callModeMock);
+    objectUnderTest.showCallRequest(recipent);
+}
+
 TEST_F(UserPortTestSuite, shallShowPeerDisconnected)
 {
     EXPECT_CALL(callModeMock, appendIncomingText(_));

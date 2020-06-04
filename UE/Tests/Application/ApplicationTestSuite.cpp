@@ -325,4 +325,20 @@ TEST_F(ApplicationTalkingTestSuite, shallHandlePeerNotConnectedAfterUnknowRecipi
     objectUnderTest.handlePeerNotConnected(recipient);
 }
 
+TEST_F(ApplicationTalkingTestSuite, shallHandleNewCallRequestWhenTalking)
+{
+    common::PhoneNumber recipient{123};
+
+    EXPECT_CALL(btsPortMock, sendCallDropped(recipient));
+    objectUnderTest.handleReceivedCallRequest(recipient);
+}
+
+TEST_F(ApplicationTalkingTestSuite, shallIgnoreReceivedCallDroppedFromNotRecipient)
+{
+    common::PhoneNumber notRecipient{120};
+
+    EXPECT_CALL(userPortMock, showCallDropped(_)).Times(0);
+    objectUnderTest.handleReceivedCallDropped(notRecipient);
+}
+
 }
