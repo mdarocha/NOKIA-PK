@@ -42,9 +42,9 @@ std::vector<DbMessage> DbPort::getAllMessages()
     return db->get_all<DbMessage>();
 }
 
-DbMessage DbPort::getMessage(int id)
+std::unique_ptr<DbMessage> DbPort::getMessage(int id)
 {
-    return db->get<DbMessage>(id);
+    return db->get_pointer<DbMessage>(id);
 }
 
 void DbPort::markAsRead(int id)

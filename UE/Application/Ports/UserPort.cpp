@@ -309,21 +309,25 @@ void UserPort::showSmsList()
 
 void UserPort::showSms(int id)
 {
+    std::unique_ptr<DbMessage> message = dbPort->getMessage(id);
+
+    if(message == nullptr)
+        return;
+
     auto menu = (IUeGui::ITextMode*) &gui.setViewTextMode();
-    DbMessage message = dbPort->getMessage(id);
 
     std::ostringstream messageString;
 
-    if(message.fromNumber == phoneNumber.value)
+    if(message->fromNumber == phoneNumber.value)
     {
-        messageString << "To: " << message.toNumber;
+        messageString << "To: " << message->toNumber;
     }
     else
     {
-        messageString << "From: " << message.fromNumber;
+        messageString << "From: " << message->fromNumber;
     }
     messageString << std::endl << "---------" << std::endl;
-    messageString << message.text << std::endl;
+    messageString << message->text << std::endl;
     menu->setText(messageString.str());
     setCurrentMode(CurrentView::TextView, menu);
 
