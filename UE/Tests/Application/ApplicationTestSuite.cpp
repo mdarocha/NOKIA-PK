@@ -274,6 +274,7 @@ TEST_F(ApplicationConnectedTestSuite, shallHandleClose)
 TEST_F(ApplicationTalkingTestSuite, shallHandleClose)
 {
     EXPECT_CALL(timerPortMock, stopTimer());
+    EXPECT_CALL(btsPortMock, sendCallDropped(_));
     objectUnderTest.handleClose();
 }
 
