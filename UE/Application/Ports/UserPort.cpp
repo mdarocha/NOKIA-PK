@@ -299,7 +299,7 @@ void UserPort::showSmsList()
         bool can_clear_icon = true;
         for(auto& m : messages)
         {
-            if(m.fromNumber == phoneNumber.value)
+            if(m.status == (int) MessageStatus::sent)
             {
                 menu->addSelectionListItem("To: " + std::to_string(m.toNumber), m.text);
             }
