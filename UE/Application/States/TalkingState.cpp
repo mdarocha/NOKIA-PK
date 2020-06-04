@@ -56,8 +56,16 @@ void TalkingState::handleSendCallDropped(common::PhoneNumber from, common::Phone
 void TalkingState::handleReceivedCallDropped(common::PhoneNumber recipient)
 {
     context.logger.logDebug("Recived Call dropped from ", recipient);
-    context.setState<ConnectedState>();
-    context.user.showCallDropped(recipient);
+    if(recipient == this->recipient)
+    {
+        context.setState<ConnectedState>();
+        context.user.showCallDropped(recipient);
+    }
+}
+
+void TalkingState::handleReceivedCallRequest(common::PhoneNumber recipient)
+{
+    context.bts.sendCallDropped(recipient);
 }
 
 void TalkingState::handleClose()
